@@ -16,7 +16,8 @@ Its architecture carries infrastructure sized for that. This product has one per
 | Hexagonal layers per module | Keep | Fast unit tests, framework-free domain |
 | Shared `common` kernel (response envelope, exceptions, global handler) | Keep, slimmed | Consistent API contract |
 | PostgreSQL + Flyway | Keep | See ADR-0002 |
-| MapStruct, Lombok | Keep | Less boilerplate, compile-time mapping |
+| Lombok | Keep | Less boilerplate on entities |
+| MapStruct | **Drop** (revised) | Only two small mappings; hand-written is clearer (ADR-0005) |
 | ArchUnit, Testcontainers, `@WebMvcTest` | Keep | Enforced boundaries; real-DB SQL tests; thin web tests |
 | Next.js admin app layout (`modules/<feature>/{api,hooks,components,types}`) | Keep | Feature-sliced frontend |
 | TanStack Query, axios, react-hook-form + zod, Tailwind tokens | Keep | Same conventions |

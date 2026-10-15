@@ -16,6 +16,6 @@ and answer questions about how the organisation pays people.
 
 ## Stack
 
-- **Backend:** Java 21, Spring Boot 3.3, PostgreSQL 16, Flyway, MapStruct
+- **Backend:** Java 21, Spring Boot 3.3, PostgreSQL 16, Flyway, JPA (writes) + SQL (reads)
 - **Frontend:** Next.js 14, TypeScript, TanStack Query, Tailwind, shadcn/ui, Recharts
 - **Tests:** JUnit 5, Mockito, Testcontainers, ArchUnit, Vitest

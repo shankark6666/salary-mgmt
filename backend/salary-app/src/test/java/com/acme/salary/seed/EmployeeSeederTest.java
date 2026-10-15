@@ -27,6 +27,7 @@ class EmployeeSeederTest {
     @AfterEach
     void cleanUp() {
         jdbc.execute("TRUNCATE salary_history, employees RESTART IDENTITY");
+        jdbc.execute("ALTER SEQUENCE employee_code_seq RESTART WITH 1");
     }
 
     @Test
@@ -62,6 +63,15 @@ class EmployeeSeederTest {
 
         assertThat(insertedAgain).isZero();
         assertThat(count("SELECT count(*) FROM employees")).isEqualTo(200);
+    }
+
+    @Test
+    void employeeCodeSequenceContinuesAfterSeededCodes() {
+        seeder(200).seed();
+
+        Long next = jdbc.queryForObject("SELECT nextval('employee_code_seq')", Long.class);
+
+        assertThat(next).isEqualTo(201L);
     }
 
     private EmployeeSeeder seeder(int employeeCount) {

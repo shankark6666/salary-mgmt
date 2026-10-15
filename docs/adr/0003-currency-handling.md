@@ -25,5 +25,8 @@ Option 3.
 
 ## Consequences
 
+- The API returns money as JSON numbers. A double round-trips any decimal of up to 15
+  significant digits and `NUMERIC(14,2)` has at most 14, so values display exactly. The frontend
+  only formats money; it never does arithmetic on it.
 - Cross-country figures depend on the reference rates; the UI states the rates' as-of date.
 - Updating a rate is a data change, not a code change.

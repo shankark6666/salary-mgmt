@@ -45,6 +45,11 @@ schema with Testcontainers tests.
 
 From this point every phase lands through a PR with green CI (see `CLAUDE.md` → Git workflow).
 
+### 5. Employee module
+> You can merge once CI is done.
+
+Domain rules and use cases written test-first; then persistence, web, and full-stack tests.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -55,3 +60,7 @@ Things caught by checking the agent's output against reality rather than accepti
 | Craveo's exception handler returns 400 for "not found". | Read the source before reusing it. | Each exception type owns its HTTP status. |
 | The seeded app silently connected to a *different* Postgres. | Ran the real 10k seed instead of trusting the tests. | Moved compose Postgres to host port 5433. |
 | Seeded salary histories had decade-long gaps without a raise. | Read sample rows the way an HR manager would. | Annual review on every anniversary, ~15% of years skipped. |
+| `@Validated` on the controller would route parameter errors to a handler that returns 500. | Knew the Spring 6.1 behaviour change; controller tests assert 400. | Rely on Spring MVC's built-in method validation. |
+| A clean first run of the architecture tests could mean the rules match nothing. | Introduced a deliberate Spring import into the domain. | Rule failed as expected; change reverted. |
+| MapStruct carried over from Craveo by default. | Asked whether it earned its place for two mappings. | Removed; recorded in ADR-0005. |
+| `.gitignore` rule `out/` (for Next.js) silently ignored the Java `port/out/` package; the local build passed because the files existed on disk. | Built every commit from a clean worktree before pushing. | Anchored the rule to `/frontend/out/`; folded the ports into their commit. |

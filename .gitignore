@@ -5,8 +5,9 @@ target/
 
 # Node / Next.js
 node_modules/
-.next/
-out/
+/frontend/.next/
+# Next.js static export. Anchored: a bare "out/" also matched Java "port/out" packages.
+/frontend/out/
 coverage/
 *.tsbuildinfo
 next-env.d.ts

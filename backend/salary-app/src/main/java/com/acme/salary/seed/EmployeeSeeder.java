@@ -109,6 +109,12 @@ public class EmployeeSeeder implements ApplicationRunner {
                     ps.setDate(4, Date.valueOf(row.change().effectiveDate()));
                     ps.setString(5, row.change().reason());
                 });
+
+        // New hires created through the app continue after the seeded codes.
+        jdbc.queryForObject("""
+                SELECT setval('employee_code_seq',
+                              (SELECT max(substring(employee_code FROM 5)::int) FROM employees))""",
+                Long.class);
     }
 
     private Map<String, BigDecimal> loadUsdRates() {

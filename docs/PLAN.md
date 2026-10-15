@@ -57,6 +57,6 @@ Indexes: `employees(country_code, job_title_id)`, `employees(department_id)`,
 | Domain | JUnit 5 + AssertJ | Validation, salary-change rules, outlier maths |
 | Application | Mockito | Use-case orchestration, history writes |
 | Web | `@WebMvcTest` | Request validation, error envelope, paging params |
-| SQL / insights | Testcontainers Postgres | Median, percentiles, FX conversion on a small known dataset |
+| SQL / API | Testcontainers Postgres | Read-model SQL, constraints, median/percentiles, FX conversion on small known datasets |
 | Architecture | ArchUnit | Layer and module boundaries |
 | Frontend | Vitest + Testing Library | Form validation, filter ↔ query mapping, table states |

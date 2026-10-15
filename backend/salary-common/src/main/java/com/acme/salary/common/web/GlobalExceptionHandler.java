@@ -4,6 +4,8 @@ import com.acme.salary.common.api.ApiResponse;
 import com.acme.salary.common.api.ErrorCodes;
 import com.acme.salary.common.exception.SalaryAppException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -31,6 +33,25 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Void>> handleAppException(SalaryAppException ex) {
         return ResponseEntity.status(ex.getStatus())
                 .body(ApiResponse.error(ex.getErrorCode(), ex.getMessage()));
+    }
+
+    /** Another request committed a change to the same record between our read and our write. */
+    @ExceptionHandler(OptimisticLockingFailureException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleConcurrentUpdate(OptimisticLockingFailureException ex) {
+        return ApiResponse.error(ErrorCodes.CONFLICT,
+                "This record was changed by someone else. Reload and try again.");
+    }
+
+    /**
+     * A database constraint caught what application checks could not, typically two requests
+     * racing to use the same email. The constraint detail is logged, not returned.
+     */
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleConstraintViolation(DataIntegrityViolationException ex) {
+        log.warn("Data integrity violation: {}", ex.getMostSpecificCause().getMessage());
+        return ApiResponse.error(ErrorCodes.CONFLICT, "The change conflicts with existing data");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
