@@ -7,7 +7,8 @@ services:
       POSTGRES_USER: salary
       POSTGRES_PASSWORD: salary
     ports:
-      - "5432:5432"
+      # 5433 on the host so it never collides with a locally installed Postgres on 5432.
+      - "5433:5432"
     volumes:
       - salary-pgdata:/var/lib/postgresql/data
     healthcheck:

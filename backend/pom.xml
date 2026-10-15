@@ -30,6 +30,15 @@
         <springdoc.version>2.6.0</springdoc.version>
     </properties>
 
+    <!-- Compile-time only; every module uses it, so it is declared once here. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
