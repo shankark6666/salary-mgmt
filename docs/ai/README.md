@@ -50,6 +50,14 @@ From this point every phase lands through a PR with green CI (see `CLAUDE.md` �
 
 Domain rules and use cases written test-first; then persistence, web, and full-stack tests.
 
+### 6. Insights, and raising the security bar
+> yes man make sure system will be like enterprise level software with zero attacks
+
+The agent pushed back on "zero attacks" (no system can promise that) and proposed defence in
+depth instead. It reversed the earlier decision to leave out authentication — for salary data
+that was the wrong call — and scheduled a dedicated security phase straight after insights.
+Insight SQL is verified against a dataset whose answers are computed by hand.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
