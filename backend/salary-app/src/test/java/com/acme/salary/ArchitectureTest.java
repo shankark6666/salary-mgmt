@@ -35,4 +35,15 @@ class ArchitectureTest {
             .that().resideInAPackage("..domain..")
             .should().dependOnClassesThat().resideInAnyPackage("..application..", "..adapter..",
                     "..infrastructure..");
+
+    @ArchTest
+    static final ArchRule insightsIsIndependentOfEmployee = noClasses()
+            .that().resideInAPackage("com.acme.salary.insights..")
+            .should().dependOnClassesThat().resideInAPackage("com.acme.salary.employee..")
+            .because("modules talk to the database through their own ports, not each other's code");
+
+    @ArchTest
+    static final ArchRule employeeIsIndependentOfInsights = noClasses()
+            .that().resideInAPackage("com.acme.salary.employee..")
+            .should().dependOnClassesThat().resideInAPackage("com.acme.salary.insights..");
 }
