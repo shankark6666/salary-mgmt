@@ -42,8 +42,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <aside className="flex shrink-0 flex-row items-center gap-2 border-b border-border bg-card px-4 py-3 md:w-60 md:flex-col md:items-stretch md:border-b-0 md:border-r md:px-3 md:py-5">
-        <p className="px-2 text-sm font-semibold text-primary md:mb-6">ACME Salary</p>
-        <nav aria-label="Main" className="flex flex-1 flex-row gap-1 md:flex-col">
+        <p className="whitespace-nowrap px-1 text-sm font-semibold text-primary md:mb-6 md:px-2">ACME Salary</p>
+        <nav aria-label="Main" className="flex min-w-0 flex-1 flex-row gap-1 md:flex-col">
           {NAV.map(({ href, label, icon: Icon }) => {
             const active = pathname.startsWith(href);
             return (
@@ -67,9 +67,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <p className="truncate text-sm font-medium">{user.displayName}</p>
             <Badge className="mt-1">{user.role === "HR_MANAGER" ? "Manager" : "Analyst · read-only"}</Badge>
           </div>
-          <Button variant="ghost" size="sm" onClick={signOut} disabled={logout.isPending} className="md:justify-start">
+          <Button variant="ghost" size="sm" onClick={signOut} disabled={logout.isPending} aria-label="Sign out" className="md:justify-start">
             <LogOut className="h-4 w-4" aria-hidden />
-            Sign out
+            <span className="hidden md:inline">Sign out</span>
           </Button>
         </div>
       </aside>
