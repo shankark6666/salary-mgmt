@@ -1,0 +1,12 @@
+# Weekly PRs for vulnerable or outdated dependencies; CI must pass before they merge.
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /backend
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

@@ -9,6 +9,10 @@ public final class ErrorCodes {
     public static final String CONFLICT = "CONFLICT";
     public static final String BUSINESS_RULE_VIOLATION = "BUSINESS_RULE_VIOLATION";
     public static final String INTERNAL_ERROR = "INTERNAL_ERROR";
+    public static final String UNAUTHENTICATED = "UNAUTHENTICATED";
+    public static final String INVALID_CREDENTIALS = "INVALID_CREDENTIALS";
+    public static final String FORBIDDEN = "FORBIDDEN";
+    public static final String CSRF_INVALID = "CSRF_INVALID";
 
     private ErrorCodes() {
     }

@@ -21,6 +21,7 @@
         <module>salary-common</module>
         <module>salary-employee</module>
         <module>salary-insights</module>
+        <module>salary-identity</module>
         <module>salary-app</module>
     </modules>
 
@@ -55,6 +56,11 @@
             <dependency>
                 <groupId>com.acme.salary</groupId>
                 <artifactId>salary-insights</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.acme.salary</groupId>
+                <artifactId>salary-identity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

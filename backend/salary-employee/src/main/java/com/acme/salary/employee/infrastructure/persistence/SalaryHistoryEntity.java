@@ -41,6 +41,9 @@ class SalaryHistoryEntity {
     @Column(nullable = false, length = 500)
     private String reason;
 
+    @Column(name = "changed_by", nullable = false, updatable = false, length = 100)
+    private String changedBy;
+
     @Column(name = "changed_at", nullable = false, insertable = false, updatable = false)
     private Instant changedAt;
 }

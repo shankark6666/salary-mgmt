@@ -8,6 +8,7 @@ import com.acme.salary.employee.application.model.CreateEmployeeCommand;
 import com.acme.salary.employee.application.model.EmployeeView;
 import com.acme.salary.employee.application.model.UpdateEmployeeCommand;
 import com.acme.salary.employee.application.port.in.EmployeeCommands;
+import com.acme.salary.employee.application.port.out.CurrentActor;
 import com.acme.salary.employee.application.port.out.EmployeeReadModel;
 import com.acme.salary.employee.application.port.out.EmployeeRepository;
 import com.acme.salary.employee.application.port.out.ReferenceDataRepository;
@@ -33,15 +34,17 @@ public class EmployeeCommandService implements EmployeeCommands {
     private final SalaryHistoryRepository history;
     private final ReferenceDataRepository referenceData;
     private final EmployeeReadModel readModel;
+    private final CurrentActor actor;
     private final Clock clock;
 
     public EmployeeCommandService(EmployeeRepository employees, SalaryHistoryRepository history,
                                   ReferenceDataRepository referenceData,
-                                  EmployeeReadModel readModel, Clock clock) {
+                                  EmployeeReadModel readModel, CurrentActor actor, Clock clock) {
         this.employees = employees;
         this.history = history;
         this.referenceData = referenceData;
         this.readModel = readModel;
+        this.actor = actor;
         this.clock = clock;
     }
 
@@ -58,7 +61,7 @@ public class EmployeeCommandService implements EmployeeCommands {
                 command.jobTitleId(), command.employmentType(), command.hireDate(),
                 command.salary(), today());
         Employee saved = employees.save(employee);
-        history.append(saved.getId(), saved.startingSalary());
+        history.append(saved.getId(), saved.startingSalary(), actor.username());
         return view(saved.getId());
     }
 
@@ -84,7 +87,7 @@ public class EmployeeCommandService implements EmployeeCommands {
         SalaryChange change = employee.changeSalary(command.newSalary(), command.effectiveDate(),
                 command.reason(), today(), latestChange);
         employees.save(employee);
-        history.append(id, change);
+        history.append(id, change, actor.username());
         return view(id);
     }
 

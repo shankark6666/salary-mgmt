@@ -7,6 +7,7 @@ import com.acme.salary.employee.application.model.ChangeSalaryCommand;
 import com.acme.salary.employee.application.model.CreateEmployeeCommand;
 import com.acme.salary.employee.application.model.EmployeeView;
 import com.acme.salary.employee.application.model.UpdateEmployeeCommand;
+import com.acme.salary.employee.application.port.out.CurrentActor;
 import com.acme.salary.employee.application.port.out.EmployeeReadModel;
 import com.acme.salary.employee.application.port.out.EmployeeRepository;
 import com.acme.salary.employee.application.port.out.ReferenceDataRepository;
@@ -59,13 +60,16 @@ class EmployeeCommandServiceTest {
     private ReferenceDataRepository referenceData;
     @Mock
     private EmployeeReadModel readModel;
+    @Mock
+    private CurrentActor actor;
 
     private EmployeeCommandService service;
     private final EmployeeView view = mock(EmployeeView.class);
 
     @BeforeEach
     void setUp() {
-        service = new EmployeeCommandService(employees, history, referenceData, readModel, CLOCK);
+        service = new EmployeeCommandService(employees, history, referenceData, readModel, actor, CLOCK);
+        lenient().when(actor.username()).thenReturn("hana.manager");
         lenient().when(referenceData.countryExists(anyString())).thenReturn(true);
         lenient().when(referenceData.departmentExists(anyInt())).thenReturn(true);
         lenient().when(referenceData.jobTitleExists(anyInt())).thenReturn(true);
@@ -86,7 +90,7 @@ class EmployeeCommandServiceTest {
             verify(employees).save(saved.capture());
             assertThat(saved.getValue().getEmployeeCode()).isEqualTo("EMP-10001");
             verify(history).append(eq(1L), eq(new SalaryChange(null, new BigDecimal("85000.00"),
-                    HIRE_DATE, "Starting salary")));
+                    HIRE_DATE, "Starting salary")), eq("hana.manager"));
             assertThat(result).isSameAs(view);
         }
 
@@ -187,7 +191,7 @@ class EmployeeCommandServiceTest {
                     "Annual review"));
 
             verify(history).append(1L, new SalaryChange(new BigDecimal("85000.00"),
-                    new BigDecimal("90000.00"), TODAY, "Annual review"));
+                    new BigDecimal("90000.00"), TODAY, "Annual review"), "hana.manager");
             ArgumentCaptor<Employee> saved = ArgumentCaptor.forClass(Employee.class);
             verify(employees).save(saved.capture());
             assertThat(saved.getValue().getSalary()).isEqualTo(new BigDecimal("90000.00"));
@@ -201,7 +205,7 @@ class EmployeeCommandServiceTest {
             assertThatThrownBy(() -> service.changeSalary(1L, new ChangeSalaryCommand(0,
                     new BigDecimal("90000"), LocalDate.of(2026, 2, 1), "Backdated")))
                     .isInstanceOf(BusinessRuleException.class);
-            verify(history, never()).append(anyLong(), any());
+            verify(history, never()).append(anyLong(), any(), any());
         }
 
         @Test

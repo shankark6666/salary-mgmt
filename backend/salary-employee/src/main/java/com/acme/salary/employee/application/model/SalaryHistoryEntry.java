@@ -10,5 +10,6 @@ public record SalaryHistoryEntry(
         BigDecimal newSalary,
         LocalDate effectiveDate,
         String reason,
+        String changedBy,
         Instant recordedAt) {
 }
