@@ -31,6 +31,12 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
 - SQL aggregates are tested against Postgres via Testcontainers with small, hand-checked datasets.
 - `mvn verify` and `pnpm test` must pass before committing.
 
-## Commits
+## Git workflow
 
-Small, one concern each, imperative mood (`Add salary history endpoint`).
+- Never commit to `main` directly. One branch per phase / feature: `feat/<name>`, `fix/<name>`,
+  `docs/<name>`.
+- Small commits, one concern each, imperative mood (`Add salary history endpoint`). Each commit
+  must build and pass tests on its own.
+- Open a pull request into `main` with: what changed, why, how it was verified.
+- Merge only when CI is green. Merge with a merge commit (not squash) so the incremental commit
+  history stays visible.

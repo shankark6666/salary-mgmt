@@ -33,3 +33,25 @@ GraphQL, k8s). It flagged multi-currency comparison as the central product decis
 > Let's create the repo and start working on it. No deadline. Use PostgreSQL.
 
 Produced phase 1: requirements, ADRs, plan, this log.
+
+### 3. Repository and schema
+> Let's run gh auth login. / yes man
+
+The agent ran the GitHub device-login flow, created the private repo, and implemented the Flyway
+schema with Testcontainers tests.
+
+### 4. Seed data, and moving to pull requests
+> we use pull request as well
+
+From this point every phase lands through a PR with green CI (see `CLAUDE.md` → Git workflow).
+
+## Where human review changed the outcome
+
+Things caught by checking the agent's output against reality rather than accepting it:
+
+| What happened | How it was caught | Fix |
+|---|---|---|
+| A commit's POM referenced a module that only arrived in the next commit. | Built each commit in isolation before pushing. | Rebuilt the commits so each one builds. |
+| Craveo's exception handler returns 400 for "not found". | Read the source before reusing it. | Each exception type owns its HTTP status. |
+| The seeded app silently connected to a *different* Postgres. | Ran the real 10k seed instead of trusting the tests. | Moved compose Postgres to host port 5433. |
+| Seeded salary histories had decade-long gaps without a raise. | Read sample rows the way an HR manager would. | Annual review on every anniversary, ~15% of years skipped. |
