@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { toApiError } from "@shared/api/errors";
 import { Button } from "@shared/components/ui/button";
 import { Dialog } from "@shared/components/ui/dialog";
@@ -37,7 +37,7 @@ export function ChangeSalaryDialog({ employee, latestChangeDate, open, onClose, 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     reset,
     setError,
@@ -47,7 +47,8 @@ export function ChangeSalaryDialog({ employee, latestChangeDate, open, onClose, 
     defaultValues: { newSalary: "", effectiveDate: today, reason: "" }
   });
 
-  const delta = percentChange(employee.salary, watch("newSalary") ?? "");
+  const newSalary = useWatch({ control, name: "newSalary" });
+  const delta = percentChange(employee.salary, newSalary ?? "");
 
   const close = () => {
     reset();

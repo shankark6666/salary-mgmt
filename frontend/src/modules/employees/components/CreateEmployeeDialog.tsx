@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useReferenceData } from "@modules/reference/hooks/useReferenceData";
 import { Button } from "@shared/components/ui/button";
 import { Dialog } from "@shared/components/ui/dialog";
@@ -13,7 +13,7 @@ import { Select } from "@shared/components/ui/select";
 import { todayIso } from "@shared/lib/dates";
 import { applyServerErrors } from "@shared/lib/formErrors";
 import { useCreateEmployee } from "../hooks/useEmployees";
-import { createEmployeeSchema, type CreateEmployeeValues } from "../lib/schemas";
+import { createEmployeeSchema, type CreateEmployeeFormInput, type CreateEmployeeValues } from "../lib/schemas";
 import { EMPLOYMENT_TYPE_LABELS, type EmploymentType } from "../types/employee.types";
 import { FormAlert } from "./FormAlert";
 
@@ -28,16 +28,17 @@ export function CreateEmployeeDialog({ open, onClose }: { open: boolean; onClose
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     reset,
     setError,
     formState: { errors }
-  } = useForm<CreateEmployeeValues>({
+  } = useForm<CreateEmployeeFormInput, unknown, CreateEmployeeValues>({
     resolver: zodResolver(createEmployeeSchema(today)),
     defaultValues: { employmentType: "FULL_TIME", hireDate: today }
   });
 
-  const currency = reference?.countries.find((c) => c.code === watch("countryCode"))?.currencyCode;
+  const countryCode = useWatch({ control, name: "countryCode" });
+  const currency = reference?.countries.find((c) => c.code === countryCode)?.currencyCode;
 
   const close = () => {
     reset();

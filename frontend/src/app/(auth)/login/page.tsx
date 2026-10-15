@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Sign in" };
 export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <Card className="w-full max-w-sm shadow-sm">
+      <Card className="w-full max-w-sm shadow-xs">
         <CardHeader>
           <p className="text-sm font-semibold text-primary">ACME Salary</p>
           <CardTitle className="text-xl">Sign in</CardTitle>

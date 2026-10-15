@@ -43,7 +43,7 @@ export function EmployeeTable({ employees, loading, sort, direction, onSort, sho
                   type="button"
                   onClick={() => onSort(field)}
                   className={cn(
-                    "inline-flex items-center gap-1 rounded uppercase hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                    "inline-flex items-center gap-1 rounded-sm uppercase hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring",
                     active && "text-foreground"
                   )}
                 >
@@ -71,7 +71,7 @@ export function EmployeeTable({ employees, loading, sort, direction, onSort, sho
           : employees?.map((employee) => (
               <Tr key={employee.id} className="hover:bg-muted">
                 <Td>
-                  <Link href={`/employees/${employee.id}`} className="font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                  <Link href={`/employees/${employee.id}`} className="font-medium hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
                     {employee.fullName}
                   </Link>
                   <p className="text-xs text-muted-foreground">

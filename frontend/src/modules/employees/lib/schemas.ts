@@ -12,7 +12,7 @@ export const moneyField = z
 
 const employmentType = z.enum(["FULL_TIME", "PART_TIME", "CONTRACTOR"]);
 const selectedId = (label: string) =>
-  z.coerce.number({ invalid_type_error: `Choose a ${label}` }).int().positive(`Choose a ${label}`);
+  z.coerce.number({ error: `Choose a ${label}` }).int().positive(`Choose a ${label}`);
 
 const details = {
   fullName: z.string().trim().min(1, "Enter a name").max(200, "Keep it under 200 characters"),
@@ -58,9 +58,13 @@ export function changeSalarySchema({ currentSalary, earliestDate, today }: Salar
   });
 }
 
-export type CreateEmployeeValues = z.infer<ReturnType<typeof createEmployeeSchema>>;
-export type UpdateEmployeeValues = z.infer<typeof updateEmployeeSchema>;
-export type ChangeSalaryValues = z.infer<ReturnType<typeof changeSalarySchema>>;
+// Forms hold raw input (select values are strings until coerced); submit handlers receive the
+// validated output. react-hook-form is typed with both.
+export type CreateEmployeeFormInput = z.input<ReturnType<typeof createEmployeeSchema>>;
+export type CreateEmployeeValues = z.output<ReturnType<typeof createEmployeeSchema>>;
+export type UpdateEmployeeFormInput = z.input<typeof updateEmployeeSchema>;
+export type UpdateEmployeeValues = z.output<typeof updateEmployeeSchema>;
+export type ChangeSalaryValues = z.output<ReturnType<typeof changeSalarySchema>>;
 
 /**
  * Changes this large are usually a typo (a zero too many or too few), so the form asks the user

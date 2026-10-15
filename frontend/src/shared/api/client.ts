@@ -38,6 +38,9 @@ http.interceptors.response.use(undefined, async (error) => {
   ) {
     // Session expired mid-use: back to sign-in, then return here.
     const next = encodeURIComponent(window.location.pathname + window.location.search);
+    // A full page load on purpose: it wipes every in-memory salary figure, and an interceptor
+    // has no router to call anyway.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.assign(`/login?next=${next}`);
   }
   return Promise.reject(toApiError(error));

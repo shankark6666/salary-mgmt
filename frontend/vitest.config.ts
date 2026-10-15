@@ -8,7 +8,10 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./vitest.setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}"]
+    include: ["src/**/*.test.{ts,tsx}"],
+    // The first test in a file pays for module transforms and jsdom start-up: ~1s warm, several
+    // seconds on a cold CI runner. Budgets sized for that keep results independent of machine speed.
+    testTimeout: 15_000
   },
   resolve: {
     alias: {

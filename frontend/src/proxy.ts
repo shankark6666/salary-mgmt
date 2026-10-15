@@ -9,7 +9,7 @@ const PUBLIC_PATHS = new Set(["/login"]);
  * 2. No session cookie → sign-in page. This is a UX shortcut only: the API checks the session on
  *    every call, so a forged cookie gets an empty shell and 401s, never data.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
 
   if (!PUBLIC_PATHS.has(pathname) && !request.cookies.has("SALARY_SESSION")) {

@@ -12,7 +12,7 @@ import { Input } from "@shared/components/ui/input";
 import { Select } from "@shared/components/ui/select";
 import { applyServerErrors } from "@shared/lib/formErrors";
 import { useUpdateEmployee } from "../hooks/useEmployees";
-import { updateEmployeeSchema, type UpdateEmployeeValues } from "../lib/schemas";
+import { updateEmployeeSchema, type UpdateEmployeeFormInput, type UpdateEmployeeValues } from "../lib/schemas";
 import { EMPLOYMENT_TYPE_LABELS, type Employee, type EmploymentType } from "../types/employee.types";
 import { FormAlert } from "./FormAlert";
 
@@ -36,7 +36,7 @@ export function EditEmployeeDialog({ employee, open, onClose, onReload }: Props)
     handleSubmit,
     setError,
     formState: { errors }
-  } = useForm<UpdateEmployeeValues>({
+  } = useForm<UpdateEmployeeFormInput, unknown, UpdateEmployeeValues>({
     resolver: zodResolver(updateEmployeeSchema),
     values: {
       fullName: employee.fullName,
