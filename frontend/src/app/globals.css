@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens, as HSL triples for Tailwind's hsl(var(--token)).
+ * Neutral surfaces, one accent (primary actions and nothing else), and status families.
+ * Dark mode follows the operating system.
+ */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 22% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 22% 14%;
+
+    --primary: 221 70% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 221 70% 38%;
+
+    --secondary: 220 14% 95%;
+    --secondary-foreground: 222 22% 14%;
+    --muted: 220 14% 97%;
+    --muted-foreground: 220 9% 40%;
+    --accent: 220 14% 95%;
+    --accent-foreground: 222 22% 14%;
+
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-muted: 0 86% 97%;
+    --destructive-muted-foreground: 0 70% 32%;
+
+    --success: 142 64% 32%;
+    --success-muted: 140 60% 96%;
+    --success-muted-foreground: 143 64% 22%;
+
+    --warning: 35 92% 45%;
+    --warning-muted: 45 96% 92%;
+    --warning-muted-foreground: 30 80% 26%;
+
+    --border: 220 13% 88%;
+    --input: 220 13% 82%;
+    --ring: 221 70% 45%;
+
+    --radius: 0.5rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: 222 24% 8%;
+      --foreground: 220 14% 92%;
+      --card: 222 22% 11%;
+      --card-foreground: 220 14% 92%;
+
+      --primary: 217 85% 62%;
+      --primary-foreground: 222 24% 8%;
+      --primary-hover: 217 85% 70%;
+
+      --secondary: 222 18% 18%;
+      --secondary-foreground: 220 14% 92%;
+      --muted: 222 18% 14%;
+      --muted-foreground: 220 10% 64%;
+      --accent: 222 18% 18%;
+      --accent-foreground: 220 14% 92%;
+
+      --destructive: 0 70% 60%;
+      --destructive-foreground: 222 24% 8%;
+      --destructive-muted: 0 40% 16%;
+      --destructive-muted-foreground: 0 80% 80%;
+
+      --success: 142 55% 50%;
+      --success-muted: 142 35% 14%;
+      --success-muted-foreground: 142 60% 75%;
+
+      --warning: 38 92% 58%;
+      --warning-muted: 38 40% 15%;
+      --warning-muted-foreground: 40 90% 75%;
+
+      --border: 222 16% 22%;
+      --input: 222 16% 28%;
+      --ring: 217 85% 62%;
+    }
+  }
+
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "tnum" 1; /* tabular figures: money columns line up */
+  }
+}

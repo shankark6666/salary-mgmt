@@ -21,6 +21,8 @@ Its architecture carries infrastructure sized for that. This product has one per
 | ArchUnit, Testcontainers, `@WebMvcTest` | Keep | Enforced boundaries; real-DB SQL tests; thin web tests |
 | Next.js admin app layout (`modules/<feature>/{api,hooks,components,types}`) | Keep | Feature-sliced frontend |
 | TanStack Query, axios, react-hook-form + zod, Tailwind tokens | Keep | Same conventions |
+| Next.js 14 | **Upgrade to 15.5** | 14.x is out of support; `pnpm audit` showed unpatched critical advisories (RCE in image optimisation, SSRF in rewrites) fixed only in ≥ 15.5.24 |
+| Radix-style headless components | **Native `<dialog>` / `<select>`** | Browser-provided focus trapping and keyboard support, zero dependencies |
 | Kafka + transactional outbox | **Drop** | No cross-service consumers; a DB transaction is enough |
 | Redis cache | **Drop** | Aggregates over 10k rows take milliseconds in Postgres |
 | GraphQL | **Drop** | A handful of REST endpoints serve one UI |

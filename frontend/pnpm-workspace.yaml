@@ -1,0 +1,9 @@
+# Only these dependencies may run install scripts (pnpm 10 blocks all others by default).
+# Both only fetch or verify their platform-specific native binary.
+onlyBuiltDependencies:
+  - esbuild
+  - unrs-resolver
+
+overrides:
+  # Next.js pins an older PostCSS with known advisories; force the patched release.
+  postcss: 8.5.30
