@@ -9,7 +9,9 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
   `domain` · `application.port.in` · `application.port.out` · `application.service` ·
   `adapter.in.web` (+ `dto`) · `infrastructure.persistence`.
 - `domain` has no Spring or JPA imports. JPA entities live in `infrastructure.persistence` and
-  are mapped to domain objects with MapStruct.
+  are mapped to domain objects by hand in the persistence adapter.
+- Reads that serve screens go through a read-model port implemented in SQL (ADR-0005). Sort
+  columns come from a closed enum; user input only reaches bind parameters.
 - Controllers depend on `port.in` interfaces, never on services or repositories directly.
 - `salary-insights` must not import `salary-employee` internals (enforced by ArchUnit).
 - Money: `BigDecimal` / `NUMERIC(14,2)` only. Never `double` or `float`.

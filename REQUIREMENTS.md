@@ -55,6 +55,8 @@ local currency so HR never sees a number that shifted because an exchange rate m
 | Pay-equity analysis by gender / ethnicity | Requires collecting sensitive personal data; needs a privacy and legal decision first, not an engineering one. |
 | Bonuses, equity, benefits | Base salary first; total compensation is a later extension of the same model. |
 | Multi-tenancy | Built for ACME only. |
+| Relocation between countries | Moving country changes the salary's currency, so it needs its own flow (new salary in the new currency, effective date). Country and hire date are therefore fixed after hiring; a relocation is modelled as deactivate + new hire for now. |
+| Future-dated salary changes | Changes take effect on or before today. Scheduling raises needs a job to apply them and a way to show "pending"; not needed to answer the questions above. |
 
 ## Non-functional requirements
 
