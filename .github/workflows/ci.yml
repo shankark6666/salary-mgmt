@@ -20,3 +20,26 @@ jobs:
           cache: maven
       # Testcontainers uses the runner's Docker daemon for integration tests.
       - run: ./mvnw -B verify
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: frontend/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      # Known high/critical vulnerabilities in shipped code fail the build.
+      - run: pnpm audit --prod --audit-level high
+      - run: pnpm lint
+      - run: pnpm test
+      # next build also type-checks.
+      - run: pnpm build
