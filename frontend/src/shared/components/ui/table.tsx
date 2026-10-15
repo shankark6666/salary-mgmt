@@ -3,7 +3,9 @@ import { cn } from "@shared/utils/cn";
 
 export function Table({ className, ...props }: HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="w-full overflow-x-auto">
+    // `relative` matters: without it, absolutely positioned children (e.g. sr-only labels) escape
+    // the scroll container and widen the whole page on small screens.
+    <div className="relative w-full overflow-x-auto">
       <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
     </div>
   );

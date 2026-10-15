@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@shared/components/layout/PageHeader";
-import { EmptyState } from "@shared/components/feedback/EmptyState";
+import { Suspense } from "react";
+import { EmployeeDirectory } from "@modules/employees/components/EmployeeDirectory";
 
 export const metadata: Metadata = { title: "Employees" };
 
 export default function EmployeesPage() {
   return (
-    <>
-      <PageHeader title="Employees" description="Directory and salary records." />
-      <EmptyState title="Directory coming next" />
-    </>
+    <Suspense>
+      <EmployeeDirectory />
+    </Suspense>
   );
 }

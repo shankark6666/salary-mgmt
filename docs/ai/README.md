@@ -69,6 +69,13 @@ the test that proves it.
 Next.js app mirroring Craveo's admin-app layout: token-only Tailwind, `shared/` primitives,
 `modules/<feature>/{api,hooks,components,types}`. Same-origin proxy, nonce CSP, sign-in flow.
 
+### 9. Employee screens
+> ye go for it
+
+Directory with URL-held filters, detail page with salary history, hire / edit / change-salary /
+deactivate flows, role-aware actions. Verified by unit tests and by driving the production build
+in headless Chrome (Playwright) at four screen widths, light and dark.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -89,3 +96,7 @@ Things caught by checking the agent's output against reality rather than accepti
 | Matching Craveo meant Next 14, which `pnpm audit` showed has unpatched critical RCE/SSRF advisories. | Ran an audit before writing any code. | Next 15.5.28 (patched); deviation recorded in ADR-0004. |
 | A nonce CSP only works if Next actually stamps the nonce on its scripts. | Checked a production build: all 15 script tags carry the header's nonce, and it changes per request. | — (verified, no change needed) |
 | The post-login `?next=` parameter was an open-redirect vector. | Asked what a crafted link could do. | `safeNextPath`, with tests for `//host`, `https://`, backslash and `javascript:` forms. |
+| A scripted browser run suggested search was broken. | Logged the real API requests before "fixing" anything. | Not a bug: the script clicked stale rows mid-refresh. No change made. |
+| −43.9% salary changes went through silently. | Looked at the dialog as an HR user would. | Warning at ≥ 25% change: likely an extra or missing zero. |
+| Pages scrolled sideways on phones. | Measured `scrollWidth` at 4 widths instead of eyeballing. | An `sr-only` label (absolute) escaped the table's scroll box; scroller made `relative`. Header actions now wrap. |
+| jsdom lacks the `<dialog>` modal API, so dialog tests could not see buttons. | Failing tests, not a skipped assertion. | Minimal polyfill in test setup that mirrors browser `open` behaviour. |
