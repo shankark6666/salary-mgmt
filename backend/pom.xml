@@ -19,6 +19,7 @@
 
     <modules>
         <module>salary-common</module>
+        <module>salary-app</module>
     </modules>
 
     <properties>
