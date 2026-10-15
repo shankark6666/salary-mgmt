@@ -19,6 +19,10 @@
             <artifactId>salary-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.acme.salary</groupId>
+            <artifactId>salary-employee</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -66,6 +70,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -59,6 +59,20 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
+    void lostOptimisticLockRaceIs409() throws Exception {
+        mvc.perform(get("/test/stale"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.errorCode").value("CONFLICT"));
+    }
+
+    @Test
+    void databaseConstraintViolationIs409WithoutLeakingConstraintNames() throws Exception {
+        mvc.perform(get("/test/duplicate"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.message").value("The change conflicts with existing data"));
+    }
+
+    @Test
     void invalidBodyReportsEachRejectedField() throws Exception {
         mvc.perform(post("/test/body")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -114,6 +128,17 @@ class GlobalExceptionHandlerTest {
         @GetMapping("/test/business-rule")
         void businessRule() {
             throw new BusinessRuleException("Employee is inactive");
+        }
+
+        @GetMapping("/test/stale")
+        void stale() {
+            throw new org.springframework.dao.OptimisticLockingFailureException("stale");
+        }
+
+        @GetMapping("/test/duplicate")
+        void duplicate() {
+            throw new org.springframework.dao.DataIntegrityViolationException(
+                    "duplicate key value violates unique constraint \"ux_employees_email_lower\"");
         }
 
         @PostMapping("/test/body")
