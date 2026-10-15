@@ -43,8 +43,10 @@ mistake does not become a breach — and making every security decision explicit
 | Repudiation of salary changes | Append-only history records who, when, what and why | `salary_history.changed_by` | `salaryChangeUpdatesSalary…` |
 | Exposed internals | Actuator exposes only `health` without details; API docs off unless enabled | `application.yml` | `otherActuatorEndpoints…` |
 | Vulnerable dependencies / code | Dependabot weekly (Maven, npm, Actions); CodeQL `security-extended` on every PR; CI fails on high/critical advisories in shipped frontend code | `.github/` | CI |
-| Malicious install scripts (npm supply chain) | pnpm 10 blocks dependency install scripts; only `esbuild` and `unrs-resolver` are allow-listed | `frontend/pnpm-workspace.yaml` | — |
-| XSS in the UI | React escaping; lint rule bans `dangerouslySetInnerHTML`; per-request nonce CSP with `strict-dynamic`, so injected scripts do not run | `middleware.ts`, `csp.ts`, `.eslintrc.json` | `csp.test.ts`; nonce verified on a production build |
+| Malicious install scripts (npm supply chain) | pnpm 12 fails the install if any dependency not on the allow-list (only `unrs-resolver`) tries to run a script | `frontend/pnpm-workspace.yaml` | CI install |
+| Third-party fetches at build time | Font self-hosted from an npm package (`next/font/local`); the build makes no requests outside the package registry | `layout.tsx` | Offline build |
+| Hijacked fresh releases (npm supply chain) | `minimumReleaseAge`: no package version younger than 3 days is installed, directly or transitively | `frontend/pnpm-workspace.yaml` | CI `--frozen-lockfile` install |
+| XSS in the UI | React escaping; lint rule bans `dangerouslySetInnerHTML`; per-request nonce CSP with `strict-dynamic`, so injected scripts do not run | `proxy.ts`, `csp.ts`, `.eslintrc.json` | `csp.test.ts`; nonce verified on a production build |
 | Open redirect via `?next=` | Only same-site paths honoured after sign-in | `safeNextPath.ts` | `safeNextPath.test.ts`, `LoginForm.test.tsx` |
 | Data left behind on shared machines | Sign-out clears the entire client cache, not just the user | `useLogout` | — |
 | Search-engine exposure | `noindex, nofollow` on every page | `layout.tsx` | — |
@@ -62,14 +64,12 @@ mistake does not become a breach — and making every security decision explicit
 
 ## Accepted dependency advisories
 
-`pnpm audit --prod` reports nothing. Two development-only advisories remain with no compatible
-fix; both affect tools that parse only this repository's own source at build time, never user
-input:
+`pnpm audit --prod` reports nothing. One development-only advisory remains with no fix
+available; it affects a tool that reads only this repository's own file paths, never user input:
 
 | Package | Via | Why accepted |
 |---|---|---|
 | `braces` (high, ReDoS) | ESLint file globbing | No patched release exists; inputs are our file paths |
-| `postcss-selector-parser` (moderate, quadratic parsing) | Tailwind 3 build | Fix is a breaking major; inputs are our stylesheets |
 
 ## Reporting
 

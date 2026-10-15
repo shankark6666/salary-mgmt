@@ -27,8 +27,13 @@ export function DirectoryFilters({ query, onChange }: Props) {
     if (debouncedSearch !== query.q) onChange({ q: debouncedSearch, page: 0 });
   }, [debouncedSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Keep the box in sync when the URL changes from elsewhere (back button, reset).
-  useEffect(() => setSearch(query.q), [query.q]);
+  // Keep the box in sync when the URL changes from elsewhere (back button, reset). Adjusting
+  // state during render, rather than in an effect, avoids an extra render pass.
+  const [syncedQuery, setSyncedQuery] = useState(query.q);
+  if (query.q !== syncedQuery) {
+    setSyncedQuery(query.q);
+    setSearch(query.q);
+  }
 
   const filtered =
     query.q !== "" || query.country !== null || query.departmentId !== null ||

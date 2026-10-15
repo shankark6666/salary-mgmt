@@ -1,9 +1,12 @@
-# Only these dependencies may run install scripts (pnpm 10 blocks all others by default).
-# Both only fetch or verify their platform-specific native binary.
-onlyBuiltDependencies:
-  - esbuild
-  - unrs-resolver
+# Supply chain: never install a version published in the last 3 days. Freshly published
+# releases are where hijacked packages land before they are caught and yanked.
+minimumReleaseAge: 4320
+
+# Dependencies allowed to run install scripts; pnpm 12 fails the install for any other that
+# tries. unrs-resolver (ESLint import resolution) only fetches its platform binary.
+allowBuilds:
+  unrs-resolver: true
 
 overrides:
-  # Next.js pins an older PostCSS with known advisories; force the patched release.
-  postcss: 8.5.30
+  # Keep PostCSS on a patched release even where a dependency pins an older one.
+  postcss: 8.5.29

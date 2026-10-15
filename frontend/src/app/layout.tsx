@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import { Providers } from "./providers";
 import "./globals.css";
 
-// Self-hosted at build time by next/font: no request to Google from the user's browser.
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+// Inter comes from an npm package, not from Google at build time: builds work offline, and the
+// font goes through the same lockfile, release-age and audit checks as every other dependency.
+const inter = localFont({
+  src: "../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2",
+  weight: "100 900",
+  variable: "--font-inter",
+  display: "swap"
+});
 
 export const metadata: Metadata = {
   title: { default: "ACME Salary", template: "%s · ACME Salary" },
