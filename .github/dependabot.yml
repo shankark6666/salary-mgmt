@@ -18,12 +18,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    # Frontend tracks the latest majors; each update is verified (tests, build, browser) before merging.
+    # TypeScript and ESLint are held at the newest versions eslint-config-next supports.
     ignore:
-      - dependency-name: "next"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "tailwindcss"
+      - dependency-name: "typescript"
+        versions: [">=6.1.0"]
+      - dependency-name: "eslint"
+        versions: [">=10.0.0"]
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /

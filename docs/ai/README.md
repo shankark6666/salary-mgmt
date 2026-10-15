@@ -76,6 +76,12 @@ Directory with URL-held filters, detail page with salary history, hire / edit / 
 deactivate flows, role-aware actions. Verified by unit tests and by driving the production build
 in headless Chrome (Playwright) at four screen widths, light and dark.
 
+### 10. Latest package versions
+> also try to use psings latest version
+
+Ambiguous ("pnpm" or "packages"?), so the agent asked rather than guessed; the answer was latest
+majors for the frontend. Done as its own PR, re-verified in the browser.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -100,3 +106,10 @@ Things caught by checking the agent's output against reality rather than accepti
 | −43.9% salary changes went through silently. | Looked at the dialog as an HR user would. | Warning at ≥ 25% change: likely an extra or missing zero. |
 | Pages scrolled sideways on phones. | Measured `scrollWidth` at 4 widths instead of eyeballing. | An `sr-only` label (absolute) escaped the table's scroll box; scroller made `relative`. Header actions now wrap. |
 | jsdom lacks the `<dialog>` modal API, so dialog tests could not see buttons. | Failing tests, not a skipped assertion. | Minimal polyfill in test setup that mirrors browser `open` behaviour. |
+| "Latest" TypeScript 7 and ESLint 10 are not supported by `eslint-config-next`. | Checked peer ranges before pinning. | TS 6.0 / ESLint 9.39: newest that actually work; Dependabot capped to match. |
+| The React Compiler lint flagged `setState` in an effect and `watch()` defeating memoisation. | Treated as findings, not noise. | Render-time state sync; `useWatch`. One intentional `location.assign` kept, with the reason inline. |
+| After the upgrade, `/icon.svg` went through the session proxy and was redirected to an https URL. | Logged failed requests in the browser run. | Proxy matcher excludes static files. |
+| Each directory page prefetched all 25 employee pages. | Same failed-request log. | `prefetch={false}` on table rows. |
+| Tests passed locally but failed from clean checkouts after the upgrade. | Ran every commit cold; then measured durations instead of re-running until green. | Cold start blew fixed 1s/5s budgets; set CI-sized `asyncUtilTimeout`/`testTimeout` in config, verified cold twice per commit. |
+| "Latest" versions were hours old; CI's pnpm rejected them under its release-age policy. | Read the CI failure instead of disabling the check. | Kept the protection (3-day minimum, explicit in config); pinned the newest release past the cutoff. |
+| A docs-only commit failed to build; rebuilds then hung. | Did not dismiss it as a flake: identical code had built a commit earlier. | `next/font/google` fetched from Google at build time; self-hosted the font from npm. |

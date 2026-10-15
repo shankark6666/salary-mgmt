@@ -19,12 +19,14 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
   `ApiResponse` error envelope.
 - Schema changes go in a new Flyway migration; never edit an applied one.
 
-## Frontend (`frontend/`, Next.js 14 App Router, TypeScript)
+## Frontend (`frontend/`, Next.js 16 App Router, React 19, TypeScript 6, Tailwind 4)
 
 - Feature code in `src/modules/<feature>/{api,hooks,components,types}`; cross-feature code in
   `src/shared`.
 - Server state via TanStack Query hooks; forms via react-hook-form + zod.
-- Colours come from tokens in `globals.css` — no hardcoded hex or Tailwind palette classes.
+- Colours come from tokens in `globals.css` (`@theme inline`) — no hardcoded hex or Tailwind palette classes.
+- Forms: `useForm<Input, unknown, Output>` with zod 4 schemas; read live values with `useWatch`, not `watch`.
+- Page-level request logic lives in `src/proxy.ts` (Next 16's replacement for middleware).
 
 ## Tests
 

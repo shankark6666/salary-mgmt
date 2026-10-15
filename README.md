@@ -17,7 +17,7 @@ and answer questions about how the organisation pays people.
 
 ## Run locally
 
-Prerequisites: Java 21+, Docker, Node 22, pnpm 10.
+Prerequisites: Java 21+, Docker, Node 22, pnpm 12.
 
 ```bash
 docker compose up -d postgres                      # Postgres 16 on localhost:5433
@@ -33,5 +33,5 @@ backend, so both run on one origin.
 ## Stack
 
 - **Backend:** Java 21, Spring Boot 3.3, PostgreSQL 16, Flyway, JPA (writes) + SQL (reads)
-- **Frontend:** Next.js 15, React 19, TypeScript, TanStack Query, react-hook-form + zod, Tailwind, Recharts
+- **Frontend:** Next.js 16, React 19.3, TypeScript 6, TanStack Query, react-hook-form + zod 4, Tailwind 4, Recharts 3
 - **Tests:** JUnit 5, Mockito, Testcontainers, ArchUnit, Vitest + Testing Library
