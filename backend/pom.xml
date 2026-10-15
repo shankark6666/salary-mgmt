@@ -19,13 +19,13 @@
 
     <modules>
         <module>salary-common</module>
+        <module>salary-employee</module>
         <module>salary-app</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
         <maven.compiler.release>21</maven.compiler.release>
-        <mapstruct.version>1.6.2</mapstruct.version>
         <archunit.version>1.3.0</archunit.version>
         <springdoc.version>2.6.0</springdoc.version>
     </properties>
@@ -47,9 +47,9 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
+                <groupId>com.acme.salary</groupId>
+                <artifactId>salary-employee</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.tngtech.archunit</groupId>
@@ -77,11 +77,6 @@
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
                                 <version>${lombok.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
                             </path>
                         </annotationProcessorPaths>
                     </configuration>
