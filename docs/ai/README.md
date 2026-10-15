@@ -58,6 +58,11 @@ depth instead. It reversed the earlier decision to leave out authentication — 
 that was the wrong call — and scheduled a dedicated security phase straight after insights.
 Insight SQL is verified against a dataset whose answers are computed by hand.
 
+### 7. Security
+Follow-through on prompt 6: identity module, session cookies + CSRF, roles, lockout, audit trail,
+security headers, Dependabot + CodeQL, and `SECURITY.md` mapping every threat to the control and
+the test that proves it.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -72,3 +77,6 @@ Things caught by checking the agent's output against reality rather than accepti
 | A clean first run of the architecture tests could mean the rules match nothing. | Introduced a deliberate Spring import into the domain. | Rule failed as expected; change reverted. |
 | MapStruct carried over from Craveo by default. | Asked whether it earned its place for two mappings. | Removed; recorded in ADR-0005. |
 | `.gitignore` rule `out/` (for Next.js) silently ignored the Java `port/out/` package; the local build passed because the files existed on disk. | Built every commit from a clean worktree before pushing. | Anchored the rule to `/frontend/out/`; folded the ports into their commit. |
+| "No authentication" was in the original scope. | Re-read the scope against the user's enterprise-grade bar and the data's sensitivity. | Reversed in ADR-0006; sign-in, roles and audit added. |
+| Craveo's JWT approach would have put tokens in browser storage. | Asked what the client actually is (browser only). | HttpOnly session cookie + CSRF instead (ADR-0006). |
+| MockMvc cannot see Tomcat's cookie attributes, so cookie tests there would pass vacuously. | Asked what each test can actually observe. | Real-HTTP test against an embedded server checks `Set-Cookie`. |

@@ -34,6 +34,7 @@ that is never lost, and answer the questions below from a single screen.
 | F7 | **Outliers** | Employees whose salary differs from the median for their role + country by more than a chosen threshold. |
 | F8 | **CSV export** | Export any filtered directory view — HR still has a path back to Excel when they need one. |
 | F9 | **Seed data** | Deterministic script producing 10,000 realistic employees. |
+| F10 | **Sign-in and roles** | HR Manager (read/write) and HR Analyst (read-only). Lockout after repeated failures. Every salary change records who made it. Added after the first draft: salary data is too sensitive to serve without it — see [`SECURITY.md`](SECURITY.md). |
 
 ### Key product decision: money across countries
 
@@ -47,7 +48,6 @@ local currency so HR never sees a number that shifted because an exchange rate m
 
 | Left out | Reasoning |
 |---|---|
-| Authentication / role-based access | One persona (HR Manager). Real deployment would sit behind the company SSO; building a bespoke login adds surface area without answering any of the questions above. First item to add if time allows. |
 | Payroll, tax, payslips | A different product with country-specific legal rules. This tool manages *compensation data*, not *payment*. |
 | Live FX rates | Pay comparison needs stable, explainable numbers. A reference table is auditable; a live feed makes reports change daily. |
 | Approval workflows | A single HR Manager is the decision maker for this release. |
@@ -55,6 +55,7 @@ local currency so HR never sees a number that shifted because an exchange rate m
 | Pay-equity analysis by gender / ethnicity | Requires collecting sensitive personal data; needs a privacy and legal decision first, not an engineering one. |
 | Bonuses, equity, benefits | Base salary first; total compensation is a later extension of the same model. |
 | Multi-tenancy | Built for ACME only. |
+| SSO / MFA and user administration | Two bootstrap accounts cover the brief. In production the app would sit behind the company identity provider, which owns MFA and joiners/leavers. |
 | Relocation between countries | Moving country changes the salary's currency, so it needs its own flow (new salary in the new currency, effective date). Country and hire date are therefore fixed after hiring; a relocation is modelled as deactivate + new hire for now. |
 | Future-dated salary changes | Changes take effect on or before today. Scheduling raises needs a job to apply them and a way to show "pending"; not needed to answer the questions above. |
 
