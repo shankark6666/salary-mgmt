@@ -1,5 +1,6 @@
 package com.acme.salary.insights;
 
+import com.acme.salary.AuthenticatedAsManager;
 import com.acme.salary.TestcontainersConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, AuthenticatedAsManager.class})
 class InsightsApiIntegrationTest {
 
     private static final int ENGINEERING = 1;

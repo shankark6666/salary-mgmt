@@ -50,13 +50,14 @@ class EmployeePersistenceAdapter implements EmployeeRepository, SalaryHistoryRep
     }
 
     @Override
-    public void append(long employeeId, SalaryChange change) {
+    public void append(long employeeId, SalaryChange change, String changedBy) {
         SalaryHistoryEntity entity = new SalaryHistoryEntity();
         entity.setEmployeeId(employeeId);
         entity.setPreviousSalary(change.previousSalary());
         entity.setNewSalary(change.newSalary());
         entity.setEffectiveDate(change.effectiveDate());
         entity.setReason(change.reason());
+        entity.setChangedBy(changedBy);
         history.saveAndFlush(entity);
     }
 

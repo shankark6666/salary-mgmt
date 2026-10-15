@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface SalaryHistoryRepository {
 
-    void append(long employeeId, SalaryChange change);
+    /** @param changedBy username recorded for the audit trail */
+    void append(long employeeId, SalaryChange change, String changedBy);
 
     Optional<LocalDate> latestEffectiveDate(long employeeId);
 }

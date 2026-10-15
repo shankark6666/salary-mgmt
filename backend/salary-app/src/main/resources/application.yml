@@ -16,20 +16,48 @@ spring:
 server:
   port: ${PORT:8080}
   shutdown: graceful
+  max-http-request-header-size: 16KB
+  error:
+    # Never echo exception details, messages or stack traces to clients.
+    include-message: never
+    include-stacktrace: never
+    include-exception: false
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: SALARY_SESSION
+        http-only: true                       # unreadable from JavaScript, so XSS cannot steal it
+        secure: ${COOKIE_SECURE:true}          # HTTPS only; browsers treat localhost as secure
+        same-site: strict                     # never sent on cross-site requests
 
 management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health
+  endpoint:
+    health:
+      show-details: never
 
 app:
+  security:
+    cookie-secure: ${COOKIE_SECURE:true}
+    bootstrap:
+      manager-username: ${BOOTSTRAP_MANAGER_USERNAME:}
+      manager-password: ${BOOTSTRAP_MANAGER_PASSWORD:}
+      analyst-username: ${BOOTSTRAP_ANALYST_USERNAME:}
+      analyst-password: ${BOOTSTRAP_ANALYST_PASSWORD:}
   seed:
     enabled: ${SEED_ENABLED:false}
     employee-count: ${SEED_EMPLOYEE_COUNT:10000}
     random-seed: 42
     as-of: 2026-10-01
 
+# API docs are attack-surface documentation: off unless explicitly enabled (e.g. locally).
 springdoc:
+  api-docs:
+    enabled: ${API_DOCS_ENABLED:false}
   swagger-ui:
+    enabled: ${API_DOCS_ENABLED:false}
     path: /swagger-ui.html

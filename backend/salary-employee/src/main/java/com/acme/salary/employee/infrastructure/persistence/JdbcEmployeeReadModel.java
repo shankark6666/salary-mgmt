@@ -108,7 +108,7 @@ class JdbcEmployeeReadModel implements EmployeeReadModel {
     @Override
     public List<SalaryHistoryEntry> salaryHistory(long employeeId) {
         return jdbc.query("""
-                SELECT id, previous_salary, new_salary, effective_date, reason, changed_at
+                SELECT id, previous_salary, new_salary, effective_date, reason, changed_by, changed_at
                 FROM salary_history
                 WHERE employee_id = :employeeId
                 ORDER BY effective_date, id""",
@@ -119,6 +119,7 @@ class JdbcEmployeeReadModel implements EmployeeReadModel {
                         rs.getBigDecimal("new_salary"),
                         rs.getObject("effective_date", java.time.LocalDate.class),
                         rs.getString("reason"),
+                        rs.getString("changed_by"),
                         rs.getTimestamp("changed_at").toInstant()));
     }
 

@@ -1,5 +1,6 @@
 package com.acme.salary.employee;
 
+import com.acme.salary.AuthenticatedAsManager;
 import com.acme.salary.TestcontainersConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(TestcontainersConfiguration.class)
+@Import({TestcontainersConfiguration.class, AuthenticatedAsManager.class})
 class EmployeeApiIntegrationTest {
 
     // Reference IDs from V1__reference_data.sql (identity columns start at 1, in insert order).
@@ -127,6 +128,7 @@ class EmployeeApiIntegrationTest {
 
         mvc.perform(get("/api/v1/employees/1/salary-history"))
                 .andExpect(jsonPath("$.data[*].reason", contains("Starting salary", "Promotion")))
+                .andExpect(jsonPath("$.data[1].changedBy").value(AuthenticatedAsManager.USERNAME))
                 .andExpect(jsonPath("$.data[1].previousSalary").value(2900000.00));
     }
 

@@ -46,4 +46,11 @@ class ArchitectureTest {
     static final ArchRule employeeIsIndependentOfInsights = noClasses()
             .that().resideInAPackage("com.acme.salary.employee..")
             .should().dependOnClassesThat().resideInAPackage("com.acme.salary.insights..");
+
+    @ArchTest
+    static final ArchRule businessModulesDoNotKnowSecurity = noClasses()
+            .that().resideInAnyPackage("com.acme.salary.employee..", "com.acme.salary.insights..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.acme.salary.identity..", "org.springframework.security..")
+            .because("who is signed in reaches business code only through ports like CurrentActor");
 }
