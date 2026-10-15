@@ -63,6 +63,12 @@ Follow-through on prompt 6: identity module, session cookies + CSRF, roles, lock
 security headers, Dependabot + CodeQL, and `SECURITY.md` mapping every threat to the control and
 the test that proves it.
 
+### 8. Frontend shell
+> continue
+
+Next.js app mirroring Craveo's admin-app layout: token-only Tailwind, `shared/` primitives,
+`modules/<feature>/{api,hooks,components,types}`. Same-origin proxy, nonce CSP, sign-in flow.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -80,3 +86,6 @@ Things caught by checking the agent's output against reality rather than accepti
 | "No authentication" was in the original scope. | Re-read the scope against the user's enterprise-grade bar and the data's sensitivity. | Reversed in ADR-0006; sign-in, roles and audit added. |
 | Craveo's JWT approach would have put tokens in browser storage. | Asked what the client actually is (browser only). | HttpOnly session cookie + CSRF instead (ADR-0006). |
 | MockMvc cannot see Tomcat's cookie attributes, so cookie tests there would pass vacuously. | Asked what each test can actually observe. | Real-HTTP test against an embedded server checks `Set-Cookie`. |
+| Matching Craveo meant Next 14, which `pnpm audit` showed has unpatched critical RCE/SSRF advisories. | Ran an audit before writing any code. | Next 15.5.28 (patched); deviation recorded in ADR-0004. |
+| A nonce CSP only works if Next actually stamps the nonce on its scripts. | Checked a production build: all 15 script tags carry the header's nonce, and it changes per request. | — (verified, no change needed) |
+| The post-login `?next=` parameter was an open-redirect vector. | Asked what a crafted link could do. | `safeNextPath`, with tests for `//host`, `https://`, backslash and `javascript:` forms. |

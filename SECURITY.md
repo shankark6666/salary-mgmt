@@ -42,7 +42,12 @@ mistake does not become a breach — and making every security decision explicit
 | Lost or silent edits | Optimistic locking; 409 on stale versions | Employee module | `staleVersionIsRejected…` |
 | Repudiation of salary changes | Append-only history records who, when, what and why | `salary_history.changed_by` | `salaryChangeUpdatesSalary…` |
 | Exposed internals | Actuator exposes only `health` without details; API docs off unless enabled | `application.yml` | `otherActuatorEndpoints…` |
-| Vulnerable dependencies / code | Dependabot weekly; CodeQL `security-extended` on every PR | `.github/` | CI |
+| Vulnerable dependencies / code | Dependabot weekly (Maven, npm, Actions); CodeQL `security-extended` on every PR; CI fails on high/critical advisories in shipped frontend code | `.github/` | CI |
+| Malicious install scripts (npm supply chain) | pnpm 10 blocks dependency install scripts; only `esbuild` and `unrs-resolver` are allow-listed | `frontend/pnpm-workspace.yaml` | — |
+| XSS in the UI | React escaping; lint rule bans `dangerouslySetInnerHTML`; per-request nonce CSP with `strict-dynamic`, so injected scripts do not run | `middleware.ts`, `csp.ts`, `.eslintrc.json` | `csp.test.ts`; nonce verified on a production build |
+| Open redirect via `?next=` | Only same-site paths honoured after sign-in | `safeNextPath.ts` | `safeNextPath.test.ts`, `LoginForm.test.tsx` |
+| Data left behind on shared machines | Sign-out clears the entire client cache, not just the user | `useLogout` | — |
+| Search-engine exposure | `noindex, nofollow` on every page | `layout.tsx` | — |
 
 ## Deliberately out of scope (and what production would add)
 
@@ -54,6 +59,17 @@ mistake does not become a breach — and making every security decision explicit
 | Encryption at rest | Provided by the managed database | Verify provider encryption; consider column-level encryption for salary |
 | User administration UI | Two bootstrap accounts suffice for the brief | Manage users in the IdP |
 | Field-level access (e.g. hide salaries from some roles) | Both personas need salaries | Add a role without salary visibility if needed |
+
+## Accepted dependency advisories
+
+`pnpm audit --prod` reports nothing. Two development-only advisories remain with no compatible
+fix; both affect tools that parse only this repository's own source at build time, never user
+input:
+
+| Package | Via | Why accepted |
+|---|---|---|
+| `braces` (high, ReDoS) | ESLint file globbing | No patched release exists; inputs are our file paths |
+| `postcss-selector-parser` (moderate, quadratic parsing) | Tailwind 3 build | Fix is a breaking major; inputs are our stylesheets |
 
 ## Reporting
 
