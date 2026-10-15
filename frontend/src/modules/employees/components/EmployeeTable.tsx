@@ -71,7 +71,8 @@ export function EmployeeTable({ employees, loading, sort, direction, onSort, sho
           : employees?.map((employee) => (
               <Tr key={employee.id} className="hover:bg-muted">
                 <Td>
-                  <Link href={`/employees/${employee.id}`} className="font-medium hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
+                  {/* No prefetch: 25 rows would mean 25 speculative requests per page, mostly unused. */}
+                  <Link href={`/employees/${employee.id}`} prefetch={false} className="font-medium hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring">
                     {employee.fullName}
                   </Link>
                   <p className="text-xs text-muted-foreground">
