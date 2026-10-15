@@ -1,6 +1,16 @@
 spring:
   application:
     name: salary-app
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/salary}
+    username: ${DATABASE_USERNAME:salary}
+    password: ${DATABASE_PASSWORD:salary}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # Flyway owns the schema; Hibernate only checks it matches
+  flyway:
+    locations: classpath:db/migration
 
 server:
   port: ${PORT:8080}
