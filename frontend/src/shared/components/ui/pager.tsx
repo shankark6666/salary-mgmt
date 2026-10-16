@@ -24,7 +24,7 @@ export function Pager({ page, size, totalElements, totalPages, onPageChange }: P
           <ChevronLeft className="h-4 w-4" aria-hidden />
           Previous
         </Button>
-        <span className="tabular-nums text-muted-foreground">
+        <span className="hidden tabular-nums text-muted-foreground sm:inline">
           Page {formatNumber(page + 1)} of {formatNumber(totalPages)}
         </span>
         <Button variant="secondary" size="sm" onClick={() => onPageChange(page + 1)} disabled={page + 1 >= totalPages}>
