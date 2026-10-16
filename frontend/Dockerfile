@@ -2,7 +2,7 @@
 # ACME Salary UI: Next.js standalone server. Only the traced runtime files ship.
 
 # ── dependencies ─────────────────────────────────────────────────────────────
-FROM node:22-alpine AS deps
+FROM node:25-alpine AS deps
 WORKDIR /app
 RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN --mount=type=cache,target=/root/.local/share/pnpm/store pnpm install --frozen-lockfile
 
 # ── build ────────────────────────────────────────────────────────────────────
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 RUN corepack enable
 COPY --from=deps /app/node_modules ./node_modules
@@ -22,7 +22,7 @@ ENV BACKEND_URL=$BACKEND_URL \
 RUN pnpm build
 
 # ── runtime ──────────────────────────────────────────────────────────────────
-FROM node:22-alpine
+FROM node:25-alpine
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
