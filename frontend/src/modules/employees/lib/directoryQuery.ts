@@ -76,3 +76,13 @@ export function nextSort(query: DirectoryQuery, field: SortField): Pick<Director
   const descendingFirst = field === "salaryUsd" || field === "hireDate";
   return { sort: field, direction: descendingFirst ? "DESC" : "ASC" };
 }
+
+/**
+ * Same filters and order as the screen, without paging: HR exports exactly what they see.
+ * A plain same-origin link, so the browser sends the session cookie and handles the download.
+ */
+export function exportHref(query: DirectoryQuery) {
+  const params = toSearchParams({ ...query, page: 0, size: DEFAULT_QUERY.size });
+  if (!params.has("status")) params.set("status", query.status);
+  return `/api/v1/employees/export?${params.toString()}`;
+}

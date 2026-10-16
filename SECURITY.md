@@ -40,6 +40,8 @@ mistake does not become a breach — and making every security decision explicit
 | Unbounded queries (resource exhaustion) | Page size ≤ 100, bounded thresholds and bucket counts, 16 KB header limit | Controllers, `application.yml` | `pageSizeIsCapped`, `bucketCountIsBounded` |
 | Information leakage in errors | Uniform error envelope; no stack traces, SQL or constraint names | `GlobalExceptionHandler` | `GlobalExceptionHandlerTest` |
 | Lost or silent edits | Optimistic locking; 409 on stale versions | Employee module | `staleVersionIsRejected…` |
+| Bulk data exfiltration | CSV export is **manager-only** (analysts can view, not bulk-download), capped at 100,000 rows, and every export is written to `audit_events` (who, filters, row count) before the first row leaves | `SecurityConfig`, `EmployeeExportService` | `bulkExportIsForManagersOnly…`, `everyExportIsAuditedWithWhoAndWhat` |
+| CSV / formula injection | Cells starting with `= + - @`, tab or CR are prefixed with `'` (OWASP), so a name like `=HYPERLINK(...)` cannot execute when HR opens the file | `CsvWriter` | `CsvWriterTest`, `neutralisesSpreadsheetFormulasInNames` |
 | Repudiation of salary changes | Append-only history records who, when, what and why | `salary_history.changed_by` | `salaryChangeUpdatesSalary…` |
 | Exposed internals | Actuator exposes only `health` without details; API docs off unless enabled | `application.yml` | `otherActuatorEndpoints…` |
 | Vulnerable dependencies / code | Dependabot weekly (Maven, npm, Actions); CodeQL `security-extended` on every PR; CI fails on high/critical advisories in shipped frontend code | `.github/` | CI |

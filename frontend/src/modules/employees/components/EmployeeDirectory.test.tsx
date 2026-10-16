@@ -27,10 +27,14 @@ function renderAs(role: "HR_MANAGER" | "HR_ANALYST") {
 }
 
 describe("EmployeeDirectory", () => {
-  it("lets managers add employees", async () => {
+  it("lets managers add employees and export what they are looking at", async () => {
     renderAs("HR_MANAGER");
 
     expect(await screen.findByRole("button", { name: "Add employee" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Export CSV" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/api/v1/employees/export?country=IN")
+    );
   });
 
   it("hides write actions from read-only analysts", async () => {
@@ -38,6 +42,7 @@ describe("EmployeeDirectory", () => {
 
     await screen.findByText("No employees match");
     expect(screen.queryByRole("button", { name: "Add employee" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Export CSV" })).not.toBeInTheDocument();
   });
 
   it("queries with the filters from the URL", async () => {

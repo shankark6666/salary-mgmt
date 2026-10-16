@@ -130,6 +130,14 @@ class SecurityIntegrationTest {
     }
 
     @Test
+    void bulkExportIsForManagersOnlyEvenThoughAnalystsCanReadTheRows() throws Exception {
+        mvc.perform(get("/api/v1/employees/export").with(user("ana").roles("HR_ANALYST")))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.errorCode").value("FORBIDDEN"));
+        mvc.perform(get("/api/v1/employees/export")).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void fiveWrongPasswordsLockTheAccountEvenForTheRightPassword() throws Exception {
         jdbc.update("""
                 INSERT INTO app_users (username, display_name, password_hash, role)
