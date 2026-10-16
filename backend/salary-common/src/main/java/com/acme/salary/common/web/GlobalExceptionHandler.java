@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleInvalidParameters(HandlerMethodValidationException ex) {
         Map<String, String> fieldErrors = new LinkedHashMap<>();
-        ex.getAllValidationResults().forEach(result -> fieldErrors.putIfAbsent(
+        ex.getParameterValidationResults().forEach(result -> fieldErrors.putIfAbsent(
                 result.getMethodParameter().getParameterName(),
                 result.getResolvableErrors().get(0).getDefaultMessage()));
         return ApiResponse.validationError(fieldErrors);

@@ -96,6 +96,14 @@ Treated as the most sensitive feature (the one way the whole dataset leaves the 
 only, audited before the first row is sent, formula-injection safe, streamed with a row cap.
 Verified by downloading through the real browser as both roles.
 
+### 13. Release containers, and a framework migration
+> don't do it [deploy], just make a release version of it, a containerized app, and do the other steps
+
+Scanning the release image (Trivy) found 11 HIGH/CRITICAL findings. The decisive one: Spring MVC
+CVEs with a fix only in Spring 7. The agent had earlier called Boot 3.5 "the supported line";
+that was wrong for the current date, and it said so before proposing the Boot 4 migration,
+which the user chose over a documented risk acceptance.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -133,3 +141,6 @@ Things caught by checking the agent's output against reality rather than accepti
 | KPI tiles overflowed at 768px (₹19,68,500 in a 142px tile). | Measured which containers propagate overflow, not just which elements stick out. | Tiles three-across only from `lg`; compact payroll with the exact figure underneath. |
 | Streaming set a fetch size on the shared `JdbcTemplate` — a hidden global change to every query. | Re-read the diff before running it. | A dedicated template for exports only. |
 | "Can an analyst export?" — the UI hid the button, but that is not authorization. | Called the endpoint directly as an analyst in the browser test. | Server rule: export requires `HR_MANAGER` (403 otherwise), tested. |
+| Boot 3.5 was described as "the supported line"; it had left open-source support. | A container scan showed Spring CVEs with no 6.2.x fix. | Migrated to Boot 4.1; Tomcat pinned to a patched release; correction recorded here and in `SECURITY.md`. |
+| Module tests "compiled" after the migration because Maven reused stale classes. | A `clean` build exposed a real Spring 7 API break. | Every build since uses `clean`; noted in `CLAUDE.md`. |
+| Sign-in "failed" after the migration. | Checked the server log: the request never reached the new jar. | A stale container still held port 3000; no code change needed. |

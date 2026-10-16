@@ -2,7 +2,7 @@ package com.acme.salary.identity.infrastructure.security;
 
 import com.acme.salary.common.api.ApiResponse;
 import com.acme.salary.common.api.ErrorCodes;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -16,6 +16,7 @@ Its architecture carries infrastructure sized for that. This product has one per
 | Hexagonal layers per module | Keep | Fast unit tests, framework-free domain |
 | Shared `common` kernel (response envelope, exceptions, global handler) | Keep, slimmed | Consistent API contract |
 | PostgreSQL + Flyway | Keep | See ADR-0002 |
+| Spring Boot 3.x | **Upgrade to 4.1** | Boot 3.5 / Spring Framework 6.2 left open-source support in 2026; a container scan found CRITICAL Spring MVC CVEs fixed only in 7.0.9. Tomcat is pinned one patch ahead of Boot (11.0.27) for three more CRITICAL fixes. |
 | Lombok | Keep | Less boilerplate on entities |
 | MapStruct | **Drop** (revised) | Only two small mappings; hand-written is clearer (ADR-0005) |
 | ArchUnit, Testcontainers, `@WebMvcTest` | Keep | Enforced boundaries; real-DB SQL tests; thin web tests |

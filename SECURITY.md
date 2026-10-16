@@ -64,6 +64,14 @@ mistake does not become a breach — and making every security decision explicit
 | User administration UI | Two bootstrap accounts suffice for the brief | Manage users in the IdP |
 | Field-level access (e.g. hide salaries from some roles) | Both personas need salaries | Add a role without salary visibility if needed |
 
+## Framework support windows
+
+Patching only works while the framework still ships patches. Spring Boot 3.5 / Spring
+Framework 6.2 left open-source support in 2026; a scan of the release image then found two
+CRITICAL Spring MVC advisories with no 6.2 fix. The backend was migrated to Spring Boot 4.1
+(Spring 7). Tomcat is pinned one patch ahead of Boot (`tomcat.version`) when Boot's managed
+version lags a security release. Container scanning in CI (Trivy) is what surfaces this.
+
 ## Accepted dependency advisories
 
 `pnpm audit --prod` reports nothing. One development-only advisory remains with no fix
