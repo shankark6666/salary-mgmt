@@ -6,7 +6,3 @@ minimumReleaseAge: 4320
 # tries. unrs-resolver (ESLint import resolution) only fetches its platform binary.
 allowBuilds:
   unrs-resolver: true
-
-overrides:
-  # Keep PostCSS on a patched release even where a dependency pins an older one.
-  postcss: 8.5.29
