@@ -82,6 +82,13 @@ in headless Chrome (Playwright) at four screen widths, light and dark.
 Ambiguous ("pnpm" or "packages"?), so the agent asked rather than guessed; the answer was latest
 majors for the frontend. Done as its own PR, re-verified in the browser.
 
+### 11. Insights dashboard
+> go ahead
+
+Built with the agent's data-visualisation skill as a procedure: form first (stat tiles, sorted
+bars, histogram, range bands, diverging deviation), colour by job, palette **validated by script**
+against the real card surfaces in both modes, then every page rendered and inspected at four widths.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -113,3 +120,7 @@ Things caught by checking the agent's output against reality rather than accepti
 | Tests passed locally but failed from clean checkouts after the upgrade. | Ran every commit cold; then measured durations instead of re-running until green. | Cold start blew fixed 1s/5s budgets; set CI-sized `asyncUtilTimeout`/`testTimeout` in config, verified cold twice per commit. |
 | "Latest" versions were hours old; CI's pnpm rejected them under its release-age policy. | Read the CI failure instead of disabling the check. | Kept the protection (3-day minimum, explicit in config); pinned the newest release past the cutoff. |
 | A docs-only commit failed to build; rebuilds then hung. | Did not dismiss it as a flake: identical code had built a commit earlier. | `next/font/google` fetched from Google at build time; self-hosted the font from npm. |
+| Chart colours could have been picked by eye. | The skill requires running the palette validator. | Validated against our actual light/dark card colours: CVD ΔE ≥ 19, normal-vision ΔE ≥ 29, contrast ≥ 3:1. |
+| Per-chart filters inside one long dashboard. | Checked against the anti-pattern list. | Four sub-pages, each with one filter row scoping everything below it, held in the URL. |
+| Role bands sorted by seniority read as noise. | Looked at the rendered table. | Sorted by median: a pay ladder. Scale padded so end marks are not clipped. |
+| KPI tiles overflowed at 768px (₹19,68,500 in a 142px tile). | Measured which containers propagate overflow, not just which elements stick out. | Tiles three-across only from `lg`; compact payroll with the exact figure underneath. |
