@@ -1,4 +1,4 @@
-import { DEFAULT_QUERY, nextSort, parseDirectoryQuery, toSearchParams } from "./directoryQuery";
+import { DEFAULT_QUERY, exportHref, nextSort, parseDirectoryQuery, toSearchParams } from "./directoryQuery";
 
 const parse = (search: string) => parseDirectoryQuery(new URLSearchParams(search));
 
@@ -56,5 +56,21 @@ describe("nextSort", () => {
 
   it("starts text columns A to Z", () => {
     expect(nextSort(DEFAULT_QUERY, "country")).toEqual({ sort: "country", direction: "ASC" });
+  });
+});
+
+describe("exportHref", () => {
+  it("carries the current filters and sort but not the page", () => {
+    const href = exportHref({ ...DEFAULT_QUERY, q: "sharma", country: "IN", sort: "salaryUsd", direction: "DESC", page: 7, size: 50 });
+    const params = new URL(href, "http://x").searchParams;
+
+    expect(href.startsWith("/api/v1/employees/export?")).toBe(true);
+    expect(params.get("q")).toBe("sharma");
+    expect(params.get("country")).toBe("IN");
+    expect(params.get("sort")).toBe("salaryUsd");
+    expect(params.get("direction")).toBe("DESC");
+    expect(params.get("status")).toBe("ACTIVE");
+    expect(params.has("page")).toBe(false);
+    expect(params.has("size")).toBe(false);
   });
 });

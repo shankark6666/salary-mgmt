@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Download, Plus } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { canWrite } from "@modules/auth/types/auth.types";
@@ -12,7 +12,7 @@ import { Button } from "@shared/components/ui/button";
 import { Card, CardContent } from "@shared/components/ui/card";
 import { Pager } from "@shared/components/ui/pager";
 import { useEmployeeDirectory } from "../hooks/useEmployees";
-import { nextSort, parseDirectoryQuery, toSearchParams } from "../lib/directoryQuery";
+import { exportHref, nextSort, parseDirectoryQuery, toSearchParams } from "../lib/directoryQuery";
 import type { DirectoryQuery } from "../types/employee.types";
 import { CreateEmployeeDialog } from "./CreateEmployeeDialog";
 import { DirectoryFilters } from "./DirectoryFilters";
@@ -39,10 +39,21 @@ export function EmployeeDirectory() {
         description="Salaries in local currency; ≈ shows the US dollar equivalent used for comparison."
         actions={
           canWrite(user) ? (
-            <Button onClick={() => setCreating(true)}>
-              <Plus className="h-4 w-4" aria-hidden />
-              Add employee
-            </Button>
+            <>
+              {/* Managers only: bulk export is restricted (and audited) on the server too. */}
+              <a
+                href={exportHref(query)}
+                download
+                className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-secondary px-4 text-sm font-medium text-secondary-foreground hover:bg-accent focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <Download className="h-4 w-4" aria-hidden />
+                Export CSV
+              </a>
+              <Button onClick={() => setCreating(true)}>
+                <Plus className="h-4 w-4" aria-hidden />
+                Add employee
+              </Button>
+            </>
           ) : null
         }
       />
