@@ -2,7 +2,7 @@
 
 Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour.
 
-## Backend (`backend/`, Java 21, Spring Boot 3.3, Maven multi-module)
+## Backend (`backend/`, Java 21, Spring Boot 4.1, Maven multi-module)
 
 - Modules: `salary-common`, `salary-employee`, `salary-insights`, `salary-app`.
 - Package layout inside a domain module:
@@ -18,6 +18,9 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
 - Errors: throw exceptions from `salary-common`; `GlobalExceptionHandler` maps them to the
   `ApiResponse` error envelope.
 - Schema changes go in a new Flyway migration; never edit an applied one.
+- Boot 4 test slices live in `org.springframework.boot.webmvc.test.autoconfigure`; JSON is Jackson 3
+  (`tools.jackson.*`, annotations still `com.fasterxml.jackson.annotation`). Build with `clean`:
+  stale `target/` classes have hidden real compile errors twice in this project.
 
 ## Frontend (`frontend/`, Next.js 16 App Router, React 19, TypeScript 6, Tailwind 4)
 

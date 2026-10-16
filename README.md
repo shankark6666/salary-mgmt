@@ -46,6 +46,6 @@ backend, so both run on one origin.
 
 ## Stack
 
-- **Backend:** Java 21, Spring Boot 3.3, PostgreSQL 16, Flyway, JPA (writes) + SQL (reads)
+- **Backend:** Java 21, Spring Boot 4.1 (Spring 7, Security 7, Hibernate 7, Jackson 3), PostgreSQL 16, Flyway 12, JPA (writes) + SQL (reads)
 - **Frontend:** Next.js 16, React 19.3, TypeScript 6, TanStack Query, react-hook-form + zod 4, Tailwind 4, Recharts 3
-- **Tests:** JUnit 5, Mockito, Testcontainers, ArchUnit, Vitest + Testing Library
+- **Tests:** JUnit 5, Mockito, Testcontainers 2, ArchUnit, Vitest + Testing Library
