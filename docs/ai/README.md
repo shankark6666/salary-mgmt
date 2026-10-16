@@ -89,6 +89,13 @@ Built with the agent's data-visualisation skill as a procedure: form first (stat
 bars, histogram, range bands, diverging deviation), colour by job, palette **validated by script**
 against the real card surfaces in both modes, then every page rendered and inspected at four widths.
 
+### 12. CSV export
+> yes please
+
+Treated as the most sensitive feature (the one way the whole dataset leaves the system): manager
+only, audited before the first row is sent, formula-injection safe, streamed with a row cap.
+Verified by downloading through the real browser as both roles.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -124,3 +131,5 @@ Things caught by checking the agent's output against reality rather than accepti
 | Per-chart filters inside one long dashboard. | Checked against the anti-pattern list. | Four sub-pages, each with one filter row scoping everything below it, held in the URL. |
 | Role bands sorted by seniority read as noise. | Looked at the rendered table. | Sorted by median: a pay ladder. Scale padded so end marks are not clipped. |
 | KPI tiles overflowed at 768px (₹19,68,500 in a 142px tile). | Measured which containers propagate overflow, not just which elements stick out. | Tiles three-across only from `lg`; compact payroll with the exact figure underneath. |
+| Streaming set a fetch size on the shared `JdbcTemplate` — a hidden global change to every query. | Re-read the diff before running it. | A dedicated template for exports only. |
+| "Can an analyst export?" — the UI hid the button, but that is not authorization. | Called the endpoint directly as an analyst in the browser test. | Server rule: export requires `HR_MANAGER` (403 otherwise), tested. |

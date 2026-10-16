@@ -32,7 +32,7 @@ that is never lost, and answer the questions below from a single screen.
 | F5 | **Role drill-down** | The same statistics per job title within a country, and per job title across countries (USD). |
 | F6 | **Pay distribution** | Histogram of salaries for a selected country. |
 | F7 | **Outliers** | Employees whose salary differs from the median for their role + country by more than a chosen threshold. |
-| F8 | **CSV export** | Export any filtered directory view — HR still has a path back to Excel when they need one. |
+| F8 | **CSV export** | Export any filtered directory view — HR still has a path back to Excel when they need one. Managers only, audited, spreadsheet-injection safe, opens correctly in Excel (UTF-8 BOM). |
 | F9 | **Seed data** | Deterministic script producing 10,000 realistic employees. |
 | F10 | **Sign-in and roles** | HR Manager (read/write) and HR Analyst (read-only). Lockout after repeated failures. Every salary change records who made it. Added after the first draft: salary data is too sensitive to serve without it — see [`SECURITY.md`](SECURITY.md). |
 
