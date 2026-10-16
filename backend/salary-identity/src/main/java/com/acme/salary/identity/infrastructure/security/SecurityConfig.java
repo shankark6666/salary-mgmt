@@ -1,7 +1,7 @@
 package com.acme.salary.identity.infrastructure.security;
 
 import com.acme.salary.identity.application.port.out.UserAccountRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import org.springframework.security.web.header.writers.ContentSecurityPolicyHead
 import org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -53,9 +53,9 @@ public class SecurityConfig {
             "default-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
     private static final RequestMatcher API_DOCS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/swagger-ui/**"),
-            new AntPathRequestMatcher("/swagger-ui.html"),
-            new AntPathRequestMatcher("/v3/api-docs/**"));
+            PathPatternRequestMatcher.withDefaults().matcher("/swagger-ui/**"),
+            PathPatternRequestMatcher.withDefaults().matcher("/swagger-ui.html"),
+            PathPatternRequestMatcher.withDefaults().matcher("/v3/api-docs/**"));
 
     @Bean
     SecurityFilterChain apiSecurity(HttpSecurity http, ObjectMapper objectMapper,
