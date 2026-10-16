@@ -15,6 +15,20 @@ and answer questions about how the organisation pays people.
 | [`docs/ai/`](docs/ai/README.md) | How AI tools were used, with the prompt log |
 | [`SECURITY.md`](SECURITY.md) | Threat model: every threat, its control, and the test that proves it |
 
+## Screens
+
+| Insights overview | Pay by country (India) |
+|---|---|
+| ![overview](docs/screenshots/insights-overview.png) | ![country](docs/screenshots/insights-country.png) |
+
+| Role comparison (dark) | Outliers |
+|---|---|
+| ![roles](docs/screenshots/insights-role-comparison-dark.png) | ![outliers](docs/screenshots/insights-outliers.png) |
+
+| Employee directory | Employee detail |
+|---|---|
+| ![directory](docs/screenshots/employee-directory.png) | ![detail](docs/screenshots/employee-detail.png) |
+
 ## Run locally
 
 Prerequisites: Java 21+, Docker, Node 22, pnpm 12.
