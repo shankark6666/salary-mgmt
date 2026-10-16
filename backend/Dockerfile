@@ -2,7 +2,7 @@
 # ACME Salary API. Tests run in CI (they need Docker for Testcontainers), not in this build.
 
 # ── build ────────────────────────────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:25-jdk-alpine AS build
 WORKDIR /src
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q -DskipTests package \
 # ── runtime ──────────────────────────────────────────────────────────────────
 # JRE only (no compiler, no Maven), non-root. Layers ordered from least to most frequently
 # changed, so a code change re-ships only the small application layer.
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 RUN addgroup -S app && adduser -S -G app -H app
 WORKDIR /app
 COPY --from=build /layers/dependencies/ ./
