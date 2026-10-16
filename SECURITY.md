@@ -46,6 +46,10 @@ mistake does not become a breach — and making every security decision explicit
 | Exposed internals | Actuator exposes only `health` without details; API docs off unless enabled | `application.yml` | `otherActuatorEndpoints…` |
 | Vulnerable dependencies / code | Dependabot weekly (Maven, npm, Actions); CodeQL `security-extended` on every PR; CI fails on high/critical advisories in shipped frontend code | `.github/` | CI |
 | Malicious install scripts (npm supply chain) | pnpm 12 fails the install if any dependency not on the allow-list (only `unrs-resolver`) tries to run a script | `frontend/pnpm-workspace.yaml` | CI install |
+| Container breakout / lateral movement | Non-root user, read-only root filesystem, all Linux capabilities dropped, `no-new-privileges`, memory limits; only the UI port is published (API and database are internal to the compose network) | `compose.release.yml`, Dockerfiles | Verified on the running release |
+| Tools for an attacker inside the UI container | npm, npx and corepack are removed from the runtime image (the standalone server never needs them) | `frontend/Dockerfile` | Image scan + `command -v npm` |
+| Vulnerable images | CI builds both release images and fails on any fixable HIGH/CRITICAL finding (Trivy); Dependabot tracks base images | `.github/workflows/ci.yml` | CI `containers` job |
+| Hijacked CI actions | Third-party GitHub Actions pinned to full commit SHAs, not movable tags | `.github/workflows/ci.yml` | — |
 | Third-party fetches at build time | Font self-hosted from an npm package (`next/font/local`); the build makes no requests outside the package registry | `layout.tsx` | Offline build |
 | Hijacked fresh releases (npm supply chain) | `minimumReleaseAge`: no package version younger than 3 days is installed, directly or transitively | `frontend/pnpm-workspace.yaml` | CI `--frozen-lockfile` install |
 | XSS in the UI | React escaping; lint rule bans `dangerouslySetInnerHTML`; per-request nonce CSP with `strict-dynamic`, so injected scripts do not run | `proxy.ts`, `csp.ts`, `.eslintrc.json` | `csp.test.ts`; nonce verified on a production build |
