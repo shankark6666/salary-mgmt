@@ -27,6 +27,15 @@ updates:
         versions: [">=10.0.0"]
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+  # Keeps the Dockerfile base images (JRE, Node, Postgres in compose) patched.
+  - package-ecosystem: docker
+    directory: /backend
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    directory: /frontend
+    schedule:
+      interval: weekly
   - package-ecosystem: github-actions
     directory: /
     schedule:
