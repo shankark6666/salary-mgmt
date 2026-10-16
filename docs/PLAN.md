@@ -2,21 +2,27 @@
 
 Each phase is one or a few small commits. Tests land with (or before) the code they cover.
 
-| # | Phase | Output |
-|---|---|---|
-| 1 | Docs first | `REQUIREMENTS.md`, ADRs, this plan, `CLAUDE.md`, AI usage log |
-| 2 | Backend skeleton | Parent POM, `salary-common`, `salary-app`, docker-compose Postgres, health endpoint, CI |
-| 3 | Schema | Flyway migrations: countries, fx_rates, departments, job_titles, employees, salary_history |
-| 4 | Seeder | Deterministic 10,000-employee seed (fixed RNG, JDBC batches) + test |
-| 5 | Employee module | Domain + service tests first; CRUD, search, filter, sort, pagination |
-| 6 | Salary history | Update-salary use case writes append-only history; history endpoint |
-| 7 | Insights module | Country stats, role drill-down, histogram, outliers; Testcontainers SQL tests; ArchUnit |
-| 8 | Frontend skeleton | Next.js 14, shared API client, layout, design tokens, shadcn/ui |
-| 9 | Employees UI | Table + filters, create/edit form, salary-history drawer |
-| 10 | Insights UI | Country comparison, role drill-down, histogram, outliers (Recharts) |
-| 11 | CSV export & polish | Export endpoint; empty / loading / error states |
-| 12 | Deploy | Postgres (Neon), backend container (Render), frontend (Vercel); seed prod |
-| 13 | Wrap-up | Performance notes, architecture diagram, README, demo video |
+The original plan, with what actually happened. Deviations are deliberate and explained in the
+linked PRs, ADRs and the [AI log](ai/README.md).
+
+| # | Phase | Planned | Outcome |
+|---|---|---|---|
+| 1 | Docs first | `REQUIREMENTS.md`, ADRs, this plan, `CLAUDE.md`, AI usage log | ✅ First commit |
+| 2 | Backend skeleton | Parent POM, `salary-common`, `salary-app`, docker-compose Postgres, health, CI | ✅ |
+| 3 | Schema | Flyway migrations for reference data, employees, salary history | ✅ |
+| 4 | Seeder | Deterministic 10,000-employee seed + test | ✅ #1 — 10k employees + 69k history rows in ~3 s |
+| 5 | Employee module | Domain + service tests first; CRUD, search, filter, sort, pagination | ✅ #2 |
+| 6 | Salary history | Append-only history; history endpoint | ✅ Folded into #2 |
+| 7 | Insights module | Country stats, role drill-down, histogram, outliers | ✅ #3 |
+| — | *Security (unplanned)* | *Not in the original plan: auth was "left out"* | ✅ #4 — reversed on review: sign-in, roles, CSRF, lockout, audit ([ADR-0006](adr/0006-session-authentication.md)) |
+| 8 | Frontend skeleton | Next.js 14, API client, layout, tokens, shadcn/ui | ✅ #11 — Next 15 (14 had unpatched CVEs), native dialog/select instead of shadcn |
+| 9 | Employees UI | Table + filters, forms, salary-history drawer | ✅ #18 — history on a detail page rather than a drawer |
+| — | *Latest versions (unplanned)* | | ✅ #19 — Next 16, React 19.3, Tailwind 4, zod 4, pnpm 12 with a release-age policy |
+| 10 | Insights UI | Country comparison, role drill-down, histogram, outliers | ✅ #21 — four filterable sub-pages, validated palette |
+| 11 | CSV export & polish | Export endpoint; empty / loading / error states | ✅ #23 — manager-only, audited, formula-injection safe |
+| 12 | Deploy | Neon + Render + Vercel | ↪ **Not deployed by decision**; replaced by a hardened containerised release (one `docker compose` command) |
+| — | *Spring Boot 4 (unplanned)* | | ✅ #24 — Boot 3.5 had left OSS support; container scan found Spring CVEs fixed only in Spring 7 |
+| 13 | Wrap-up | Performance notes, architecture diagram, README, demo video | ✅ [`architecture.md`](architecture.md), [`performance.md`](performance.md), [`demo-script.md`](demo-script.md) (the video is recorded from that script) |
 
 ## Target structure
 
