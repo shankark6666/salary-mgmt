@@ -7,6 +7,7 @@ import com.acme.salary.employee.application.model.EmployeeView;
 import com.acme.salary.employee.application.model.SalaryHistoryEntry;
 import com.acme.salary.employee.application.port.out.EmployeeReadModel;
 import com.acme.salary.employee.domain.EmploymentType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Directory queries in plain SQL (ADR-0005): one round trip joins everything the screen shows,
@@ -73,9 +75,16 @@ class JdbcEmployeeReadModel implements EmployeeReadModel {
             rs.getLong("version"));
 
     private final NamedParameterJdbcTemplate jdbc;
+    /** Separate template so the fetch size applies to exports only, not to every query. */
+    private final NamedParameterJdbcTemplate streamingJdbc;
 
     JdbcEmployeeReadModel(NamedParameterJdbcTemplate jdbc) {
         this.jdbc = jdbc;
+        JdbcTemplate streaming = new JdbcTemplate(jdbc.getJdbcTemplate().getDataSource());
+        // Inside a transaction, a fetch size makes Postgres use a cursor instead of buffering
+        // the whole result set in memory.
+        streaming.setFetchSize(500);
+        this.streamingJdbc = new NamedParameterJdbcTemplate(streaming);
     }
 
     @Override
@@ -87,16 +96,31 @@ class JdbcEmployeeReadModel implements EmployeeReadModel {
 
         params.addValue("limit", criteria.size());
         params.addValue("offset", (long) criteria.page() * criteria.size());
-        String orderBy = " ORDER BY %s %s NULLS LAST, e.id %s".formatted(
-                ORDER_BY.get(criteria.sort()), criteria.direction(), criteria.direction());
         List<EmployeeView> content = jdbc.query(
-                SELECT_VIEW + FROM_JOINED + where + orderBy + " LIMIT :limit OFFSET :offset",
+                SELECT_VIEW + FROM_JOINED + where + orderBy(criteria) + " LIMIT :limit OFFSET :offset",
                 params, VIEW_MAPPER);
 
         long totalElements = total == null ? 0 : total;
         int totalPages = (int) ((totalElements + criteria.size() - 1) / criteria.size());
         return new PagedResponse<>(content, criteria.page(), criteria.size(), totalElements,
                 totalPages);
+    }
+
+    @Override
+    public long count(EmployeeSearchCriteria criteria) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        Long total = jdbc.queryForObject("SELECT count(*) " + FROM_JOINED + whereClause(criteria, params),
+                params, Long.class);
+        return total == null ? 0 : total;
+    }
+
+    @Override
+    public void stream(EmployeeSearchCriteria criteria, Consumer<EmployeeView> sink) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        String sql = SELECT_VIEW + FROM_JOINED + whereClause(criteria, params) + orderBy(criteria);
+        streamingJdbc.query(sql, params, rs -> {
+            sink.accept(VIEW_MAPPER.mapRow(rs, 0));
+        });
     }
 
     @Override
@@ -121,6 +145,11 @@ class JdbcEmployeeReadModel implements EmployeeReadModel {
                         rs.getString("reason"),
                         rs.getString("changed_by"),
                         rs.getTimestamp("changed_at").toInstant()));
+    }
+
+    private static String orderBy(EmployeeSearchCriteria criteria) {
+        return " ORDER BY %s %s NULLS LAST, e.id %s".formatted(
+                ORDER_BY.get(criteria.sort()), criteria.direction(), criteria.direction());
     }
 
     private static String whereClause(EmployeeSearchCriteria criteria, MapSqlParameterSource params) {

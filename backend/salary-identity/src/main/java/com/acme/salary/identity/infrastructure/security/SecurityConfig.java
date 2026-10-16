@@ -72,6 +72,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/auth/csrf").permitAll()
                         .requestMatchers(API_DOCS).hasRole(MANAGER)
+                        // Bulk export is how the whole dataset leaves the system: managers only,
+                        // even though analysts may read the same rows on screen.
+                        .requestMatchers(HttpMethod.GET, "/api/v1/employees/export").hasRole(MANAGER)
                         .requestMatchers(HttpMethod.GET, "/api/**").hasAnyRole(MANAGER, ANALYST)
                         .requestMatchers("/api/**").hasRole(MANAGER)
                         .anyRequest().denyAll())
