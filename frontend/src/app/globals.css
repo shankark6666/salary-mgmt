@@ -81,6 +81,17 @@
     --ring: 221 70% 45%;
 
     --radius: 0.5rem;
+
+    /* Chart data ink (reference data-viz palette, validated against these card surfaces with
+       the dataviz validator: CVD ΔE ≥ 19, normal-vision ΔE ≥ 29, contrast ≥ 3:1).
+       Single-series charts use series-1; deviation (above/below peers) uses the diverging pair. */
+    --chart-series-1: #2a78d6;
+    --chart-band: #86b6ef;         /* p25–p75 band: lightest ordinal step that clears 2:1 */
+    --chart-below: #2a78d6;        /* diverging: below the peer median */
+    --chart-above: #e34948;        /* diverging: above the peer median */
+    --chart-grid: #e1e0d9;
+    --chart-axis: #c3c2b7;
+    --chart-muted: #6b6a66;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -117,6 +128,15 @@
       --border: 222 16% 22%;
       --input: 222 16% 28%;
       --ring: 217 85% 62%;
+
+      /* Dark steps of the same hues, chosen for the dark band and validated separately. */
+      --chart-series-1: #3987e5;
+      --chart-band: #184f95;
+      --chart-below: #3987e5;
+      --chart-above: #e66767;
+      --chart-grid: #2c2c2a;
+      --chart-axis: #383835;
+      --chart-muted: #a3a29b;
     }
   }
 
