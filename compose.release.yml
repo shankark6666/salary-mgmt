@@ -1,0 +1,74 @@
+# ACME Salary — the full release on one machine.
+#
+#   cp .env.example .env    # then set every password
+#   docker compose -f compose.release.yml up -d --build
+#   open http://localhost:3000
+#
+# Only the UI is published. The API and database are reachable only inside this network, so
+# the browser can never call the backend directly — every request goes through the UI's
+# same-origin proxy (ADR-0006).
+name: acme-salary
+
+x-hardening: &hardening
+  read_only: true
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: [ALL]
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: salary
+      POSTGRES_USER: salary
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - salary-data:/var/lib/postgresql/data
+    tmpfs: [/var/run/postgresql, /tmp]
+    read_only: true
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U salary -d salary"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    mem_limit: 512m
+
+  backend:
+    <<: *hardening
+    build: ./backend
+    image: acme-salary-backend:${RELEASE_VERSION:-1.0.0}
+    environment:
+      DATABASE_URL: jdbc:postgresql://postgres:5432/salary?reWriteBatchedInserts=true
+      DATABASE_USERNAME: salary
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      BOOTSTRAP_MANAGER_USERNAME: ${BOOTSTRAP_MANAGER_USERNAME:?Set BOOTSTRAP_MANAGER_USERNAME in .env}
+      BOOTSTRAP_MANAGER_PASSWORD: ${BOOTSTRAP_MANAGER_PASSWORD:?Set BOOTSTRAP_MANAGER_PASSWORD in .env}
+      BOOTSTRAP_ANALYST_USERNAME: ${BOOTSTRAP_ANALYST_USERNAME:-}
+      BOOTSTRAP_ANALYST_PASSWORD: ${BOOTSTRAP_ANALYST_PASSWORD:-}
+      # Safe to leave on: seeding is skipped once employees exist.
+      SEED_ENABLED: ${SEED_ENABLED:-true}
+    tmpfs: [/tmp]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    mem_limit: 768m
+
+  frontend:
+    <<: *hardening
+    build:
+      context: ./frontend
+      args:
+        BACKEND_URL: http://backend:8080
+    image: acme-salary-frontend:${RELEASE_VERSION:-1.0.0}
+    ports:
+      - "${UI_PORT:-3000}:3000"
+    tmpfs: [/tmp, /app/.next/cache]
+    depends_on:
+      backend:
+        condition: service_healthy
+    mem_limit: 384m
+
+volumes:
+  salary-data:
