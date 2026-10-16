@@ -104,6 +104,13 @@ CVEs with a fix only in Spring 7. The agent had earlier called Boot 3.5 "the sup
 that was wrong for the current date, and it said so before proposing the Boot 4 migration,
 which the user chose over a documented risk acceptance.
 
+### 14. Wrap-up
+> no we dont want to deploy lets go for remaining tasks
+
+Architecture diagrams (Mermaid, each rendered in a browser to prove it parses), performance
+notes built only from numbers measured during the project, the final README and a demo-video
+script. The plan now shows planned vs actual for every phase, including the unplanned ones.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -144,3 +151,5 @@ Things caught by checking the agent's output against reality rather than accepti
 | Boot 3.5 was described as "the supported line"; it had left open-source support. | A container scan showed Spring CVEs with no 6.2.x fix. | Migrated to Boot 4.1; Tomcat pinned to a patched release; correction recorded here and in `SECURITY.md`. |
 | Module tests "compiled" after the migration because Maven reused stale classes. | A `clean` build exposed a real Spring 7 API break. | Every build since uses `clean`; noted in `CLAUDE.md`. |
 | Sign-in "failed" after the migration. | Checked the server log: the request never reached the new jar. | A stale container still held port 3000; no code change needed. |
+| The module diagram's dotted "forbidden" edges read as dependencies. | Rendered the diagrams and looked at them. | Removed; the boundary rules are a table under the diagram. |
+| The plan claimed the demo video was "recorded". | Re-read the doc for statements that were not yet true. | Reworded: the script exists; the video is recorded from it. |
