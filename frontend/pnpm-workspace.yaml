@@ -3,6 +3,12 @@
 minimumReleaseAge: 4320
 
 # Dependencies allowed to run install scripts; pnpm 12 fails the install for any other that
-# tries. unrs-resolver (ESLint import resolution) only fetches its platform binary.
+# tries. Each only fetches or verifies its platform-specific native binary:
+#   esbuild — the bundler behind Angular's build; @parcel/watcher — the CLI's file watcher.
 allowBuilds:
-  unrs-resolver: true
+  esbuild: true
+  "@parcel/watcher": true
+  # Angular's build cache ships prebuilt binaries; their compile-from-source fallbacks are not
+  # needed (the build passes without them), so they are explicitly denied.
+  lmdb: false
+  msgpackr-extract: false

@@ -18,22 +18,14 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
-    # Packages that only work at matching versions move in one PR. A react bump without
-    # react-dom failed CI with "Incompatible React versions" (#35).
+    # Angular packages only work at matching versions, so they move in one PR (a split bump fails
+    # the build); the same holds for the test tooling.
     groups:
-      react:
-        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
-      next:
-        patterns: ["next", "eslint-config-next", "@next/*"]
+      angular:
+        patterns: ["@angular/*", "@angular-devkit/*", "@schematics/angular", "angular-eslint", "typescript"]
       tooling:
-        patterns: ["vitest", "@vitest/*", "vite", "@vitejs/*", "@testing-library/*", "jsdom"]
-    # Frontend tracks the latest majors; each update is verified (tests, build, browser) before merging.
-    # TypeScript and ESLint are held at the newest versions eslint-config-next supports.
+        patterns: ["vitest", "@vitest/*", "jsdom", "@testing-library/*", "eslint", "@eslint/*", "typescript-eslint"]
     ignore:
-      - dependency-name: "typescript"
-        versions: [">=6.1.0"]
-      - dependency-name: "eslint"
-        versions: [">=10.0.0"]
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
   # Keeps the Dockerfile base images (JRE, Node, Postgres in compose) patched.
@@ -42,7 +34,7 @@ updates:
     schedule:
       interval: weekly
     # Runtime majors (Java, Node) are deliberate upgrades: the image must run the same major the
-    # tests run on (CI uses Java 21 / Node 22), and only LTS lines belong in production.
+    # tests run on (CI uses Java 21 / Node 24), and only LTS lines belong in production.
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
@@ -51,7 +43,7 @@ updates:
     schedule:
       interval: weekly
     # Runtime majors (Java, Node) are deliberate upgrades: the image must run the same major the
-    # tests run on (CI uses Java 21 / Node 22), and only LTS lines belong in production.
+    # tests run on (CI uses Java 21 / Node 24), and only LTS lines belong in production.
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
