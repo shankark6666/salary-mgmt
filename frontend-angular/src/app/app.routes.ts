@@ -15,8 +15,29 @@ export const routes: Routes = [
       { path: '', pathMatch: 'full', redirectTo: 'insights' },
       {
         path: 'insights',
-        title: 'Insights · ACME Salary',
-        loadComponent: () => import('./features/insights/insights.placeholder').then((m) => m.InsightsPlaceholder),
+        loadComponent: () => import('./features/insights/components/insights-layout').then((m) => m.InsightsLayout),
+        children: [
+          {
+            path: '',
+            title: 'Insights · ACME Salary',
+            loadComponent: () => import('./features/insights/pages/overview.page').then((m) => m.OverviewPage),
+          },
+          {
+            path: 'countries',
+            title: 'Pay by country · ACME Salary',
+            loadComponent: () => import('./features/insights/pages/country.page').then((m) => m.CountryPage),
+          },
+          {
+            path: 'roles',
+            title: 'Role comparison · ACME Salary',
+            loadComponent: () => import('./features/insights/pages/roles.page').then((m) => m.RolesPage),
+          },
+          {
+            path: 'outliers',
+            title: 'Outliers · ACME Salary',
+            loadComponent: () => import('./features/insights/pages/outliers.page').then((m) => m.OutliersPage),
+          },
+        ],
       },
       {
         path: 'employees',
