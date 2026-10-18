@@ -1,0 +1,76 @@
+@use '@angular/material' as mat;
+@use '@fontsource-variable/inter';
+
+/*
+ * Material 3 theme. Colours come from Material's system tokens (--mat-sys-*), which follow the
+ * OS light/dark setting through color-scheme. Components never name raw colours.
+ */
+html {
+  color-scheme: light dark;
+
+  @include mat.theme((
+    color: (primary: mat.$azure-palette, tertiary: mat.$blue-palette),
+    typography: (plain-family: 'Inter Variable', brand-family: 'Inter Variable'),
+    density: 0,
+  ));
+
+  /* Chart data ink: the reference data-viz palette, validated by script against these surfaces
+     (CVD dE >= 19, normal-vision dE >= 29, contrast >= 3:1). Same values as the Next.js UI. */
+  --chart-series-1: #2a78d6;
+  --chart-band: #86b6ef;
+  --chart-below: #2a78d6;
+  --chart-above: #e34948;
+  --chart-grid: #e1e0d9;
+  --chart-axis: #c3c2b7;
+  --chart-muted: #6b6a66;
+
+  /* Status tints for badges and warnings. */
+  --status-success: light-dark(#e8f6ec, #14301c);
+  --status-on-success: light-dark(#14532d, #a7e3b8);
+  --status-warning: light-dark(#fef3c7, #3a2a0a);
+  --status-on-warning: light-dark(#78350f, #fcd68a);
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    --chart-series-1: #3987e5;
+    --chart-band: #184f95;
+    --chart-below: #3987e5;
+    --chart-above: #e66767;
+    --chart-grid: #2c2c2a;
+    --chart-axis: #383835;
+    --chart-muted: #a3a29b;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Shared page chrome. */
+.page-title {
+  margin: 0;
+  font: var(--mat-sys-headline-small);
+}
+
+.page-description {
+  margin: 4px 0 24px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

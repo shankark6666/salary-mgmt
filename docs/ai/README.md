@@ -111,6 +111,16 @@ Architecture diagrams (Mermaid, each rendered in a browser to prove it parses), 
 notes built only from numbers measured during the project, the final README and a demo-video
 script. The plan now shows planned vs actual for every phase, including the unplanned ones.
 
+### 15. The UI framework, caught at submission time
+> that was email i got [Incubyte's email: role "Software Craftsperson/Java/Angular-II"]
+> why you build directly in next js i already added the points complete of assessment
+
+The brief said *"ReactJS or NextJS. AngularJS for Java"*, and the first prompt asked to mirror
+Craveo, whose UI is Next.js. Those conflicted; the agent followed Craveo **without raising the
+conflict** — the exact "don't assume" failure the assessment screens for. It was caught only
+when the recruiter's email named the role. The agent owned it, estimated the port (backend,
+API, tests and docs unchanged), and on approval rebuilt the UI in Angular.
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -153,3 +163,6 @@ Things caught by checking the agent's output against reality rather than accepti
 | Sign-in "failed" after the migration. | Checked the server log: the request never reached the new jar. | A stale container still held port 3000; no code change needed. |
 | The module diagram's dotted "forbidden" edges read as dependencies. | Rendered the diagrams and looked at them. | Removed; the boundary rules are a table under the diagram. |
 | The plan claimed the demo video was "recorded". | Re-read the doc for statements that were not yet true. | Reworded: the script exists; the video is recorded from it. |
+| **The UI was built in Next.js although the brief asked Java candidates for Angular.** | The user re-read the brief against the recruiter's email. | UI rebuilt in Angular; the backend and API were unaffected by design. Lesson: list every requirement and surface conflicts *before* building. |
+| The route guard called `inject()` after an `await` (NG0203): the app never redirected to sign-in. | Driving the container in a browser; a new guard test reproduces it. | Inject before the first await. |
+| A test kept failing after the fix. | Read the stack trace's line numbers against the file on disk. | Vitest's on-disk module cache served a stale compile; cleared, and documented in `CLAUDE.md`. |

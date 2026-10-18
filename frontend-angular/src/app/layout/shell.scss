@@ -1,0 +1,159 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface);
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    width: 240px;
+    flex-shrink: 0;
+    gap: 8px;
+    padding: 20px 12px;
+    border-bottom: 0;
+    border-right: 1px solid var(--mat-sys-outline-variant);
+  }
+}
+
+.brand {
+  margin: 0 4px;
+
+  /* On the narrowest phones the nav needs the room; every page carries its own title. */
+  @media (max-width: 379px) {
+    display: none;
+  }
+  white-space: nowrap;
+  font: var(--mat-sys-title-small);
+  color: var(--mat-sys-primary);
+
+  @media (min-width: 768px) {
+    margin: 0 8px 20px;
+  }
+}
+
+.nav {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+  /* On phones the nav scrolls rather than being squeezed under the sign-out button. */
+  overflow-x: auto;
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+  }
+
+  a {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+
+    @media (min-width: 768px) {
+      gap: 8px;
+      padding: 6px 10px;
+    }
+    border-radius: 8px;
+    color: var(--mat-sys-on-surface-variant);
+    text-decoration: none;
+    font: var(--mat-sys-label-large);
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    &:hover {
+      background: var(--mat-sys-surface-container-high);
+    }
+
+    &.active {
+      background: var(--mat-sys-secondary-container);
+      color: var(--mat-sys-on-secondary-container);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--mat-sys-primary);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.user {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+
+  /* Material's text button keeps a 64px minimum even with its label hidden. */
+  .sign-out.mat-mdc-button {
+    min-width: 0;
+    padding: 0 8px;
+
+    @media (min-width: 768px) {
+      justify-content: flex-start;
+      padding: 0 12px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 16px;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  .who {
+    display: none;
+    padding: 0 8px;
+
+    @media (min-width: 768px) {
+      display: block;
+    }
+  }
+
+  .name {
+    margin: 0 0 4px;
+    font: var(--mat-sys-label-large);
+  }
+
+  .label {
+    display: none;
+
+    @media (min-width: 768px) {
+      display: inline;
+    }
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--mat-sys-surface-container-highest);
+  font: var(--mat-sys-label-small);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 16px;
+
+  @media (min-width: 768px) {
+    padding: 24px 32px;
+  }
+}

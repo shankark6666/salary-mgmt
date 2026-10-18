@@ -59,6 +59,16 @@ local currency so HR never sees a number that shifted because an exchange rate m
 | Relocation between countries | Moving country changes the salary's currency, so it needs its own flow (new salary in the new currency, effective date). Country and hire date are therefore fixed after hiring; a relocation is modelled as deactivate + new hire for now. |
 | Future-dated salary changes | Changes take effect on or before today. Scheduling raises needs a job to apply them and a way to show "pending"; not needed to answer the questions above. |
 
+## Technology constraints from the brief
+
+- **Backend:** Java (the role's language) with a relational database — Spring Boot and
+  PostgreSQL.
+- **UI:** the brief specifies *"ReactJS or NextJS. AngularJS for Java"*. This is a Java/Angular
+  role, so the UI is **Angular**. "AngularJS" (1.x) reached end of life in January 2022 and
+  receives no security fixes, so this is read as modern Angular, the framework the role names.
+  (The first UI was built in Next.js, following an instruction to mirror an existing project;
+  that conflicted with the brief and has been replaced — see the AI log.)
+
 ## Non-functional requirements
 
 - **Performance:** directory pages < 200 ms, insight queries < 300 ms at 10,000 employees.

@@ -31,6 +31,20 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
 - Forms: `useForm<Input, unknown, Output>` with zod 4 schemas; read live values with `useWatch`, not `watch`.
 - Page-level request logic lives in `src/proxy.ts` (Next 16's replacement for middleware).
 
+## Angular UI (`frontend-angular/`, Angular 22, Material, Node 24)
+
+Replaces the Next.js UI (migration in progress). Same API, same behaviour, same security model.
+
+- Standalone components, signals, zoneless, `OnPush`. Features in `src/app/features/<feature>`,
+  cross-cutting code in `src/app/core` (API, auth, icons) and `src/app/shared`.
+- HTTP: `HttpClient` with Angular's built-in XSRF (`XSRF-TOKEN` / `X-XSRF-TOKEN`); interceptor
+  order matters (error mapping outer, CSRF retry inner). Pages read data with `httpResource`.
+- `inject()` only before the first `await` in guards/functions (NG0203 otherwise).
+- CSP: nginx puts a per-request nonce into `ngCspNonce`; no `unsafe-inline`, no sanitizer
+  bypass (lint-enforced; the one allow-listed exception is the icon resolver).
+- If a test result contradicts the source, clear `node_modules/.vitest-cache` and
+  `.angular/cache`: Vitest's module cache once served a stale compile here.
+
 ## Tests
 
 - Unit tests must be fast and deterministic: no sleeps, no wall-clock, no random without a seed.

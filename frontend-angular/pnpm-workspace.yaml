@@ -1,0 +1,14 @@
+# Supply chain: never install a version published in the last 3 days. Freshly published
+# releases are where hijacked packages land before they are caught and yanked.
+minimumReleaseAge: 4320
+
+# Dependencies allowed to run install scripts; pnpm 12 fails the install for any other that
+# tries. Each only fetches or verifies its platform-specific native binary:
+#   esbuild — the bundler behind Angular's build; @parcel/watcher — the CLI's file watcher.
+allowBuilds:
+  esbuild: true
+  "@parcel/watcher": true
+  # Angular's build cache ships prebuilt binaries; their compile-from-source fallbacks are not
+  # needed (the build passes without them), so they are explicitly denied.
+  lmdb: false
+  msgpackr-extract: false
