@@ -32,13 +32,13 @@ Only the UI port is published; the API and database stay inside the compose netw
 <details>
 <summary>Run from source instead (for development)</summary>
 
-Prerequisites: Java 21+, Docker, Node 22, pnpm 12.
+Prerequisites: Java 21+, Docker, Node 24, pnpm 12.
 
 ```bash
 docker compose up -d postgres                                   # Postgres 16 on localhost:5433
 cp .env.example .env && set -a && source .env && set +a
 (cd backend && ./mvnw -q -pl salary-app -am spring-boot:run)    # API on :8080
-(cd frontend && pnpm install && pnpm dev)                       # UI on http://localhost:3000
+(cd frontend && pnpm install && pnpm start)                     # UI on http://localhost:4200
 ```
 
 Tests: `cd backend && ./mvnw clean verify` (needs Docker for Testcontainers) and
@@ -64,8 +64,8 @@ Two roles: **HR Manager** (read and write) and **HR Analyst** (read only).
 | | |
 |---|---|
 | **Backend** | Java 21, Spring Boot 4.1 (Spring 7, Security 7, Hibernate 7, Jackson 3), PostgreSQL 16, Flyway 12 — a modular monolith with hexagonal modules, JPA for writes and SQL for reads |
-| **Frontend** | Next.js 16, React 19.3, TypeScript 6, TanStack Query, react-hook-form + zod 4, Tailwind 4, Recharts 3 |
-| **Tests** | 173 backend (JUnit 5, Mockito, Testcontainers 2, ArchUnit) · 87 frontend (Vitest, Testing Library) · browser checks with Playwright |
+| **Frontend** | Angular 22 (standalone, signals, zoneless), Angular Material, typed reactive forms, Chart.js 4, TypeScript 6 — served by unprivileged nginx ([ADR-0007](docs/adr/0007-angular-frontend.md)) |
+| **Tests** | 173 backend (JUnit 5, Mockito, Testcontainers 2, ArchUnit) · 90 frontend (Vitest, Angular Testing Library) · browser checks with Playwright |
 | **Delivery** | Every change through a pull request; CI runs tests, dependency audit, image build and Trivy scan; Dependabot weekly |
 
 The architecture mirrors an existing project of mine (Craveo), deliberately sized down: its
@@ -78,10 +78,10 @@ structure is kept, its infrastructure (Kafka, Redis, GraphQL, Kubernetes) is not
 |---|---|
 | [`REQUIREMENTS.md`](REQUIREMENTS.md) | Goal, scope, features, and what is deliberately left out — with reasons |
 | [`docs/architecture.md`](docs/architecture.md) | Diagrams: runtime, modules, request flow, data model, frontend, pipeline |
-| [`docs/adr/`](docs/adr/) | Six architecture decisions and their trade-offs |
+| [`docs/adr/`](docs/adr/) | Seven architecture decisions and their trade-offs |
 | [`SECURITY.md`](SECURITY.md) | Threat model: every threat, its control, and the test that proves it |
 | [`docs/performance.md`](docs/performance.md) | Measured timings at 10,000 employees, why, and where it would stop scaling |
 | [`docs/ai/README.md`](docs/ai/README.md) | How AI was used: the prompt log, and where review changed the outcome |
 | [`docs/PLAN.md`](docs/PLAN.md) | Phases, data model and test strategy |
 | [`docs/demo-script.md`](docs/demo-script.md) | Script for the demo video |
-| [`CHANGELOG.md`](CHANGELOG.md) | What release 1.0.0 contains, and its known limitations |
+| [`CHANGELOG.md`](CHANGELOG.md) | What each release contains, and its known limitations |

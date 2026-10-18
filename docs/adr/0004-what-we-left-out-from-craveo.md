@@ -20,10 +20,7 @@ Its architecture carries infrastructure sized for that. This product has one per
 | Lombok | Keep | Less boilerplate on entities |
 | MapStruct | **Drop** (revised) | Only two small mappings; hand-written is clearer (ADR-0005) |
 | ArchUnit, Testcontainers, `@WebMvcTest` | Keep | Enforced boundaries; real-DB SQL tests; thin web tests |
-| Next.js admin app layout (`modules/<feature>/{api,hooks,components,types}`) | Keep | Feature-sliced frontend |
-| TanStack Query, axios, react-hook-form + zod, Tailwind tokens | Keep | Same conventions |
-| Next.js 14 | **Upgrade to 16** (latest) | 14.x is out of support with unpatched critical advisories (RCE in image optimisation, SSRF in rewrites). Frontend tracks latest majors: Next 16, React 19.3, Tailwind 4, zod 4, Vitest 5. TypeScript 6 / ESLint 9 are the newest that `eslint-config-next` supports. |
-| Radix-style headless components | **Native `<dialog>` / `<select>`** | Browser-provided focus trapping and keyboard support, zero dependencies |
+| Next.js admin app (layout, TanStack Query, react-hook-form + zod, Tailwind) | Kept at first, **then replaced by Angular** | The brief names Angular for the Java track; see [ADR-0007](0007-angular-frontend.md). The feature-sliced structure carried over. |
 | Kafka + transactional outbox | **Drop** | No cross-service consumers; a DB transaction is enough |
 | Redis cache | **Drop** | Aggregates over 10k rows take milliseconds in Postgres |
 | GraphQL | **Drop** | A handful of REST endpoints serve one UI |

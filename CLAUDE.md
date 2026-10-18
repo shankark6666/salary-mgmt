@@ -22,18 +22,7 @@ Read `REQUIREMENTS.md`, `docs/PLAN.md` and `docs/adr/` before changing behaviour
   (`tools.jackson.*`, annotations still `com.fasterxml.jackson.annotation`). Build with `clean`:
   stale `target/` classes have hidden real compile errors twice in this project.
 
-## Frontend (`frontend/`, Next.js 16 App Router, React 19, TypeScript 6, Tailwind 4)
-
-- Feature code in `src/modules/<feature>/{api,hooks,components,types}`; cross-feature code in
-  `src/shared`.
-- Server state via TanStack Query hooks; forms via react-hook-form + zod.
-- Colours come from tokens in `globals.css` (`@theme inline`) — no hardcoded hex or Tailwind palette classes.
-- Forms: `useForm<Input, unknown, Output>` with zod 4 schemas; read live values with `useWatch`, not `watch`.
-- Page-level request logic lives in `src/proxy.ts` (Next 16's replacement for middleware).
-
-## Angular UI (`frontend-angular/`, Angular 22, Material, Node 24)
-
-Replaces the Next.js UI (migration in progress). Same API, same behaviour, same security model.
+## Frontend (`frontend/`, Angular 22, Angular Material, Node 24)
 
 - Standalone components, signals, zoneless, `OnPush`. Features in `src/app/features/<feature>`,
   cross-cutting code in `src/app/core` (API, auth, icons) and `src/app/shared`.

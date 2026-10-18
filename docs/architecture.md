@@ -11,19 +11,19 @@ flowchart LR
 
     subgraph release["compose.release.yml — one host"]
         direction LR
-        ui["frontend<br/>Next.js 16 standalone<br/>:3000 (only published port)"]
+        ui["frontend<br/>Angular 22 on nginx (unprivileged)<br/>:3000 (only published port)"]
         api["backend<br/>Spring Boot 4.1 · Java 21<br/>:8080 (internal)"]
         db[("postgres 16<br/>(internal, volume)")]
     end
 
     hr -- "HTTPS · session cookie<br/>HttpOnly · Secure · SameSite=Strict" --> ui
-    ui -- "pages: nonce CSP, auth redirect (proxy.ts)" --> ui
+    ui -- "static app · per-request CSP nonce" --> ui
     ui -- "/api/* proxied, same origin" --> api
     api -- "JDBC · Flyway migrations" --> db
 ```
 
-- The browser only ever talks to **one origin**. Next.js serves the pages and forwards `/api/*`
-  to Spring Boot, so cookies stay first-party and the API needs no CORS policy at all
+- The browser only ever talks to **one origin**. nginx serves the Angular app and forwards
+  `/api/*` to Spring Boot, so cookies stay first-party and the API needs no CORS policy at all
   ([ADR-0006](adr/0006-session-authentication.md)).
 - Only the UI port is published. The API and database are reachable solely inside the compose
   network; every container runs as a non-root user on a read-only filesystem with all Linux
@@ -85,7 +85,7 @@ reads are one hand-written SQL query per screen.
 sequenceDiagram
     autonumber
     participant B as Browser
-    participant P as Next.js proxy
+    participant P as nginx (/api proxy)
     participant S as Spring Security
     participant C as EmployeeCommandService
     participant E as Employee (domain)
@@ -176,32 +176,31 @@ erDiagram
 
 ## 5. Frontend
 
+Angular 22, standalone components, signals, zoneless ([ADR-0007](adr/0007-angular-frontend.md)).
+
 ```mermaid
 flowchart TB
-    subgraph app["src/app (routes)"]
-        login["(auth)/login"]
-        emp["(app)/employees · /employees/[id]"]
-        ins["(app)/insights · /countries · /roles · /outliers"]
+    routes["app.routes.ts<br/>/login · /employees · /employees/:id<br/>/insights · /countries · /roles · /outliers<br/>(lazy-loaded, authGuard)"]
+    subgraph features["src/app/features"]
+        auth["auth<br/>login page"]
+        employees["employees<br/>directory · detail · dialogs"]
+        insightsF["insights<br/>pages · charts · tables"]
+        reference["reference<br/>countries, departments, titles<br/>(loaded once)"]
     end
-    subgraph modules["src/modules (feature slices)"]
-        auth["auth"]
-        employees["employees"]
-        insightsM["insights"]
-        reference["reference"]
-    end
-    shared["src/shared<br/>api client (CSRF, typed errors) · UI primitives · formatting · CSP"]
-    proxy["src/proxy.ts<br/>nonce CSP · session redirect"]
+    core["src/app/core<br/>apiResource · interceptors (errors, CSRF retry)<br/>auth service + guard · icons"]
+    shared["src/app/shared<br/>formatting pipes · form errors · empty/error states"]
+    nginx["nginx<br/>CSP nonce → ngCspNonce · /api proxy · security headers"]
 
-    login --> auth
-    emp --> employees
-    ins --> insightsM
-    employees & insightsM --> reference
-    auth & employees & insightsM & reference --> shared
+    routes --> auth & employees & insightsF
+    employees & insightsF --> reference
+    auth & employees & insightsF & reference --> core
+    employees & insightsF --> shared
+    nginx -. serves .-> routes
 ```
 
-Each module follows Craveo's admin-app layout: `api/` (HTTP calls) → `hooks/` (TanStack Query)
-→ `components/`, with `types/` and `lib/` (pure, unit-tested logic such as URL state, form
-schemas and chart geometry).
+Each feature keeps `data/` (types, request builders and pure, unit-tested logic such as URL
+state, validators and chart geometry) apart from its components. Filter state lives in the
+URL, so every view can be bookmarked or shared.
 
 ## 6. Delivery pipeline
 
@@ -210,7 +209,7 @@ flowchart LR
     pr["Pull request"] --> ci
     subgraph ci["GitHub Actions"]
         be["backend<br/>mvn verify: 173 tests<br/>(Testcontainers Postgres)"]
-        fe["frontend<br/>audit · lint · 87 tests · build"]
+        fe["frontend<br/>audit · lint · 90 tests · build"]
         img["containers<br/>build images · Trivy scan<br/>(HIGH/CRITICAL fail)"]
         cq["CodeQL<br/>(once repo is public)"]
     end

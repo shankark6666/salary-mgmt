@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0 — 2026-10-18
+
+The UI is rebuilt in **Angular**, as the brief specifies for the Java track
+([ADR-0007](docs/adr/0007-angular-frontend.md)). Features, API and security model are unchanged.
+
+### Changed
+
+- Frontend: Angular 22, Angular Material, Chart.js 4, TypeScript 6 (replaces Next.js 16 / React).
+- UI container: static files on unprivileged nginx (93 MB, was 293 MB); no Node.js at runtime.
+  nginx proxies `/api` and issues a per-request CSP nonce.
+- CI, Dependabot and the release workflow build, test and scan the Angular app.
+
+### Quality
+
+- 90 frontend tests (Vitest, Angular Testing Library); browser checks of every page at four
+  widths in light and dark mode: no CSP violations, no console errors, no horizontal overflow.
+
 ## 1.0.0 — 2026-10-18
 
 First release: salary management for ACME's HR team, replacing spreadsheets.
