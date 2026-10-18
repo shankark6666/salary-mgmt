@@ -4,9 +4,11 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { csrfRetryInterceptor, sessionAndErrorInterceptor } from './core/api/interceptors';
 import { provideIcons } from './core/icons/icons';
+import { AppPaginatorIntl } from './core/paginator-intl';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -23,5 +25,6 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([sessionAndErrorInterceptor, csrfRetryInterceptor]),
     ),
     provideIcons(),
+    { provide: MatPaginatorIntl, useClass: AppPaginatorIntl },
   ],
 };

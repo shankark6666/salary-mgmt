@@ -3,8 +3,7 @@ import { provideRouter } from '@angular/router';
 import { render, screen } from '@testing-library/angular';
 import { AuthService } from '../core/auth/auth.service';
 import { Shell } from './shell';
-import { MatIconRegistry } from '@angular/material/icon';
-import { of } from 'rxjs';
+import { fakeIcons } from '../testing/icons';
 
 async function renderAs(role: 'HR_MANAGER' | 'HR_ANALYST') {
   const auth = {
@@ -16,8 +15,7 @@ async function renderAs(role: 'HR_MANAGER' | 'HR_ANALYST') {
     providers: [
       provideRouter([]),
       { provide: AuthService, useValue: auth },
-      // Icons are fetched over HTTP in the app; tests render them as empty SVGs.
-      { provide: MatIconRegistry, useValue: { getNamedSvgIcon: () => of(document.createElementNS('http://www.w3.org/2000/svg', 'svg')), getDefaultFontSetClass: () => [], getFontSetClassName: (s: string) => s } },
+      fakeIcons,
     ],
   });
   return auth;
