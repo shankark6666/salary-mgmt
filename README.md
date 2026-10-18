@@ -84,3 +84,4 @@ structure is kept, its infrastructure (Kafka, Redis, GraphQL, Kubernetes) is not
 | [`docs/ai/README.md`](docs/ai/README.md) | How AI was used: the prompt log, and where review changed the outcome |
 | [`docs/PLAN.md`](docs/PLAN.md) | Phases, data model and test strategy |
 | [`docs/demo-script.md`](docs/demo-script.md) | Script for the demo video |
+| [`CHANGELOG.md`](CHANGELOG.md) | What release 1.0.0 contains, and its known limitations |
