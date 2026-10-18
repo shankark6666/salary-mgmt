@@ -28,6 +28,10 @@ updates:
     ignore:
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # The Angular compiler supports TypeScript >=6.0 <6.1; TypeScript 7 fails the build (#45).
+      # Raise this together with an Angular release that supports the newer TypeScript.
+      - dependency-name: "typescript"
+        versions: [">=6.1.0"]
   # Keeps the Dockerfile base images (JRE, Node, Postgres in compose) patched.
   - package-ecosystem: docker
     directory: /backend
@@ -42,11 +46,14 @@ updates:
     directory: /frontend
     schedule:
       interval: weekly
-    # Runtime majors (Java, Node) are deliberate upgrades: the image must run the same major the
-    # tests run on (CI uses Java 21 / Node 24), and only LTS lines belong in production.
     ignore:
-      - dependency-name: "*"
+      # Node in the build stage: LTS majors only, matching CI (Node 24).
+      - dependency-name: "node"
         update-types: ["version-update:semver-major"]
+      # nginx odd minors (1.31) are the mainline branch; production stays on the stable line
+      # (1.30.x patches still arrive). Move to the next stable (1.32) deliberately (#44).
+      - dependency-name: "nginxinc/nginx-unprivileged"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
