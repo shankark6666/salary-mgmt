@@ -1,0 +1,92 @@
+<a routerLink="/employees" class="back">
+  <mat-icon svgIcon="arrow-left" aria-hidden="true" />
+  Employees
+</a>
+
+@if (notFound()) {
+  <app-error-state message="This employee does not exist." [retryable]="false" />
+} @else if (employee.error(); as error) {
+  <app-error-state [message]="error.message" (retry)="employee.reload()" />
+} @else if (employee.value(); as e) {
+  <app-page-header [title]="e.fullName" [description]="e.employeeCode + ' · ' + e.jobTitleName + ', ' + e.departmentName">
+    @if (editable()) {
+      <button mat-stroked-button type="button" (click)="edit(e)">
+        <mat-icon svgIcon="pencil" aria-hidden="true" />
+        Edit details
+      </button>
+      <button mat-flat-button type="button" (click)="changeSalary(e)" [disabled]="!history.value()">
+        <mat-icon svgIcon="wallet" aria-hidden="true" />
+        Change salary
+      </button>
+      <button mat-button type="button" (click)="deactivate(e)">
+        <mat-icon svgIcon="user-x" aria-hidden="true" />
+        Deactivate
+      </button>
+    }
+  </app-page-header>
+
+  @if (!e.active) {
+    <p class="notice">Inactive employee — the record is read-only and excluded from insights.</p>
+  }
+
+  <div class="grid">
+    <section class="card pay" aria-label="Annual salary">
+      <p class="label">Annual salary</p>
+      <p class="amount">{{ e.salary | money: e.currencyCode }}</p>
+      @if (e.currencyCode !== 'USD') {
+        <p class="sub">≈ {{ e.salaryUsd | money: 'USD' }}@if (reference(); as r) { at reference rates of {{ r.fxRatesAsOf | isoDate }}}</p>
+      }
+    </section>
+    <section class="card details" aria-label="Details">
+      <dl>
+        <div><dt>Status</dt><dd><span class="badge" [class.active]="e.active">{{ e.active ? 'Active' : 'Inactive' }}</span></dd></div>
+        <div><dt>Email</dt><dd>{{ e.email }}</dd></div>
+        <div><dt>Country</dt><dd>{{ e.countryName }} ({{ e.currencyCode }})</dd></div>
+        <div><dt>Department</dt><dd>{{ e.departmentName }}</dd></div>
+        <div><dt>Employment</dt><dd>{{ labels[e.employmentType] }}</dd></div>
+        <div><dt>Hired</dt><dd>{{ e.hireDate | isoDate }}</dd></div>
+      </dl>
+    </section>
+  </div>
+
+  <section class="card history">
+    <h2>Salary history</h2>
+    <p class="sub">Every change, who recorded it and why. History is never edited.</p>
+    @if (history.error(); as error) {
+      <app-error-state [message]="error.message" (retry)="history.reload()" />
+    } @else if (history.value()) {
+      <div class="table-scroll">
+        <table mat-table [dataSource]="timeline()" aria-label="Salary history">
+          <ng-container matColumnDef="effectiveDate">
+            <th mat-header-cell *matHeaderCellDef>Effective</th>
+            <td mat-cell *matCellDef="let h" class="nowrap">{{ h.effectiveDate | isoDate }}</td>
+          </ng-container>
+          <ng-container matColumnDef="salary">
+            <th mat-header-cell *matHeaderCellDef class="num">Salary</th>
+            <td mat-cell *matCellDef="let h" class="num tabular strong">{{ h.newSalary | money: e.currencyCode }}</td>
+          </ng-container>
+          <ng-container matColumnDef="change">
+            <th mat-header-cell *matHeaderCellDef class="num">Change</th>
+            <td mat-cell *matCellDef="let h" class="num tabular" [class.up]="h.delta > 0" [class.down]="h.delta < 0">
+              {{ h.delta === null ? '—' : (h.delta | signedPercent) }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="reason">
+            <th mat-header-cell *matHeaderCellDef>Reason</th>
+            <td mat-cell *matCellDef="let h">{{ h.reason }}</td>
+          </ng-container>
+          <ng-container matColumnDef="changedBy">
+            <th mat-header-cell *matHeaderCellDef>Recorded by</th>
+            <td mat-cell *matCellDef="let h" class="muted">{{ h.changedBy }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns"></tr>
+        </table>
+      </div>
+    } @else {
+      <mat-progress-bar mode="indeterminate" aria-label="Loading salary history" />
+    }
+  </section>
+} @else {
+  <mat-progress-bar mode="indeterminate" aria-label="Loading employee" />
+}
