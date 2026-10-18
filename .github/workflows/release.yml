@@ -1,4 +1,4 @@
-# On a version tag (v1.0.0), build both images, scan them, and publish to GitHub Container
+# On a version tag (v2.0.0), build both images, scan them, and publish to GitHub Container
 # Registry with an SBOM and build provenance. Nothing is published that fails the scan.
 name: Release
 

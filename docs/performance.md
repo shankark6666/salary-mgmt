@@ -45,8 +45,8 @@ end-to-end HTTP through the UI's proxy unless noted.
 - **Bounded requests.** Page size ≤ 100, histogram buckets ≤ 50, thresholds from a fixed list:
   no request can ask the database for unbounded work.
 - **Frontend.** Previous results stay on screen (dimmed) while the next page loads; search is
-  debounced (300 ms); reference data is cached for the session; table rows do not prefetch
-  (that alone removed 25 speculative requests per directory page).
+  debounced (300 ms); reference data is loaded once per session; pages are lazy-loaded, so
+  the first load ships only the shell (157 kB compressed).
 
 ## Deliberately not done (and when it would be)
 

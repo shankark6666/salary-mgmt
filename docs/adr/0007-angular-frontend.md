@@ -1,16 +1,13 @@
 # ADR-0007: Angular for the frontend
 
-**Status:** Accepted (supersedes the frontend rows of [ADR-0004](0004-what-we-left-out-from-craveo.md))
+**Status:** Accepted
 
 ## Context
 
 The brief lists the UI options as *"ReactJS or NextJS. AngularJS for Java"*. The role is a Java
-and Angular position, so the Java track's option applies: Angular.
-
-The first UI was built in Next.js, because the plan mirrored Craveo, whose admin app is Next.js.
-That followed the reference project instead of the brief. It was caught after the backend,
-the full UI and the release were done, and the UI was rebuilt in Angular in four pull
-requests (#40–#43) against the unchanged API.
+and Angular position, so the Java track's option applies: Angular. Craveo, the reference
+architecture for the backend (ADR-0001, ADR-0004), uses a different frontend stack, so its
+backend structure is reused but its UI stack is not.
 
 "AngularJS" (1.x) reached end of life in January 2022 and gets no security fixes. Shipping it
 would contradict the security posture of the rest of the system, so the brief is read as
@@ -35,9 +32,9 @@ modern Angular.
 
 ## Consequences
 
-- Same API, behaviour and security model as before; the backend did not change.
-- The UI image went from 293 MB (Node standalone server) to 93 MB (nginx and static files),
-  and the runtime has no package manager or JavaScript engine to abuse.
-- Session-based route protection moved from server middleware to a route guard plus the API's
-  own 401s. The guard is a convenience; the API remains the security boundary.
-- Angular packages must move together, so Dependabot groups them into one PR.
+- The UI image is nginx and static files (93 MB): no Node.js, package manager or JavaScript
+  engine at runtime for an attacker to use.
+- Route protection is a client-side guard plus the API's own 401s. The guard is a convenience;
+  the API remains the security boundary.
+- Angular packages must move together, so Dependabot groups them into one PR, and TypeScript
+  stays within the compiler's supported range.
