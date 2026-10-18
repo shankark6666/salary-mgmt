@@ -15,15 +15,13 @@ linked PRs, ADRs and the [AI log](ai/README.md).
 | 6 | Salary history | Append-only history; history endpoint | ✅ Folded into #2 |
 | 7 | Insights module | Country stats, role drill-down, histogram, outliers | ✅ #3 |
 | — | *Security (unplanned)* | *Not in the original plan: auth was "left out"* | ✅ #4 — reversed on review: sign-in, roles, CSRF, lockout, audit ([ADR-0006](adr/0006-session-authentication.md)) |
-| 8 | Frontend skeleton | Next.js 14, API client, layout, tokens, shadcn/ui | ✅ #11 — Next 15 (14 had unpatched CVEs), native dialog/select instead of shadcn |
-| 9 | Employees UI | Table + filters, forms, salary-history drawer | ✅ #18 — history on a detail page rather than a drawer |
-| — | *Latest versions (unplanned)* | | ✅ #19 — Next 16, React 19.3, Tailwind 4, zod 4, pnpm 12 with a release-age policy |
-| 10 | Insights UI | Country comparison, role drill-down, histogram, outliers | ✅ #21 — four filterable sub-pages, validated palette |
+| 8 | Frontend skeleton | Angular app, API client, layout, tokens | ✅ #40 — Angular 22 + Material, served by nginx with a nonce CSP ([ADR-0007](adr/0007-angular-frontend.md)) |
+| 9 | Employees UI | Table + filters, forms, salary-history drawer | ✅ #41 — history on a detail page rather than a drawer |
+| 10 | Insights UI | Country comparison, role drill-down, histogram, outliers | ✅ #42 — four filterable sub-pages, validated palette |
 | 11 | CSV export & polish | Export endpoint; empty / loading / error states | ✅ #23 — manager-only, audited, formula-injection safe |
 | 12 | Deploy | Neon + Render + Vercel | ↪ **Not deployed by decision**; replaced by a hardened containerised release (one `docker compose` command) |
 | — | *Spring Boot 4 (unplanned)* | | ✅ #24 — Boot 3.5 had left OSS support; container scan found Spring CVEs fixed only in Spring 7 |
 | 13 | Wrap-up | Performance notes, architecture diagram, README, demo video | ✅ [`architecture.md`](architecture.md), [`performance.md`](performance.md), [`demo-script.md`](demo-script.md) (the video is recorded from that script) |
-| — | *Angular UI (unplanned)* | | ✅ #40–#43 — the brief names Angular for the Java track; the Next.js UI was rebuilt in Angular against the unchanged API ([ADR-0007](adr/0007-angular-frontend.md)) |
 
 ## Target structure
 

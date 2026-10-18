@@ -20,7 +20,7 @@ Its architecture carries infrastructure sized for that. This product has one per
 | Lombok | Keep | Less boilerplate on entities |
 | MapStruct | **Drop** (revised) | Only two small mappings; hand-written is clearer (ADR-0005) |
 | ArchUnit, Testcontainers, `@WebMvcTest` | Keep | Enforced boundaries; real-DB SQL tests; thin web tests |
-| Next.js admin app (layout, TanStack Query, react-hook-form + zod, Tailwind) | Kept at first, **then replaced by Angular** | The brief names Angular for the Java track; see [ADR-0007](0007-angular-frontend.md). The feature-sliced structure carried over. |
+| Admin frontend stack | **Not reused** | The brief names Angular for the Java track ([ADR-0007](0007-angular-frontend.md)); the feature-sliced structure carries over. |
 | Kafka + transactional outbox | **Drop** | No cross-service consumers; a DB transaction is enough |
 | Redis cache | **Drop** | Aggregates over 10k rows take milliseconds in Postgres |
 | GraphQL | **Drop** | A handful of REST endpoints serve one UI |

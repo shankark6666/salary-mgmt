@@ -15,6 +15,10 @@ countries, and to answer how the organisation pays people — replacing a set of
 |---|---|
 | ![directory](docs/screenshots/employee-directory.png) | ![detail](docs/screenshots/employee-detail.png) |
 
+| Change salary: large-change warning | Directory on a phone (dark mode) |
+|---|---|
+| ![change salary](docs/screenshots/change-salary.png) | <img src="docs/screenshots/directory-phone-dark.png" alt="directory on a phone" width="300"> |
+
 ## Run it
 
 The release runs anywhere Docker does. It is **not deployed to a public URL** by choice; this

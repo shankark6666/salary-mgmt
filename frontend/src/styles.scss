@@ -15,7 +15,7 @@ html {
   ));
 
   /* Chart data ink: the reference data-viz palette, validated by script against these surfaces
-     (CVD dE >= 19, normal-vision dE >= 29, contrast >= 3:1). Same values as the Next.js UI. */
+     (CVD dE >= 19, normal-vision dE >= 29, contrast >= 3:1). */
   --chart-series-1: #2a78d6;
   --chart-band: #86b6ef;
   --chart-below: #2a78d6;
