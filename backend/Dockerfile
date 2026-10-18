@@ -18,7 +18,9 @@ RUN --mount=type=cache,target=/root/.m2 ./mvnw -B -q -DskipTests package \
 # JRE only (no compiler, no Maven), non-root. Layers ordered from least to most frequently
 # changed, so a code change re-ships only the small application layer.
 FROM eclipse-temurin:21-jre-alpine
-RUN addgroup -S app && adduser -S -G app -H app
+# Take Alpine security patches as soon as they ship, not when the base image is next rebuilt.
+RUN apk upgrade --no-cache \
+ && addgroup -S app && adduser -S -G app -H app
 WORKDIR /app
 COPY --from=build /layers/dependencies/ ./
 COPY --from=build /layers/spring-boot-loader/ ./

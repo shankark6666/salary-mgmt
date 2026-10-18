@@ -32,10 +32,20 @@ updates:
     directory: /backend
     schedule:
       interval: weekly
+    # Runtime majors (Java, Node) are deliberate upgrades: the image must run the same major the
+    # tests run on (CI uses Java 21 / Node 22), and only LTS lines belong in production.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker
     directory: /frontend
     schedule:
       interval: weekly
+    # Runtime majors (Java, Node) are deliberate upgrades: the image must run the same major the
+    # tests run on (CI uses Java 21 / Node 22), and only LTS lines belong in production.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
