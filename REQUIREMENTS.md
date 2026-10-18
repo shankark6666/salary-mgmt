@@ -67,7 +67,8 @@ local currency so HR never sees a number that shifted because an exchange rate m
   role, so the UI is **Angular**. "AngularJS" (1.x) reached end of life in January 2022 and
   receives no security fixes, so this is read as modern Angular, the framework the role names.
   (The first UI was built in Next.js, following an instruction to mirror an existing project;
-  that conflicted with the brief and has been replaced — see the AI log.)
+  that conflicted with the brief and has been replaced — see
+  [ADR-0007](docs/adr/0007-angular-frontend.md) and the AI log.)
 
 ## Non-functional requirements
 

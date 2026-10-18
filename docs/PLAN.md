@@ -23,6 +23,7 @@ linked PRs, ADRs and the [AI log](ai/README.md).
 | 12 | Deploy | Neon + Render + Vercel | ↪ **Not deployed by decision**; replaced by a hardened containerised release (one `docker compose` command) |
 | — | *Spring Boot 4 (unplanned)* | | ✅ #24 — Boot 3.5 had left OSS support; container scan found Spring CVEs fixed only in Spring 7 |
 | 13 | Wrap-up | Performance notes, architecture diagram, README, demo video | ✅ [`architecture.md`](architecture.md), [`performance.md`](performance.md), [`demo-script.md`](demo-script.md) (the video is recorded from that script) |
+| — | *Angular UI (unplanned)* | | ✅ #40–#43 — the brief names Angular for the Java track; the Next.js UI was rebuilt in Angular against the unchanged API ([ADR-0007](adr/0007-angular-frontend.md)) |
 
 ## Target structure
 
@@ -33,8 +34,8 @@ salary-mgmt/
 │   ├── salary-employee/    employees + salary history (hexagonal)
 │   ├── salary-insights/    read-side analytics (SQL)
 │   └── salary-app/         Spring Boot launcher, Flyway, seeder, config
-├── frontend/               Next.js 14 (App Router)
-│   └── src/{app, modules/{employees,insights}, shared}
+├── frontend/               Angular 22 + Angular Material, served by nginx
+│   └── src/app/{core, features/{auth,employees,insights,reference}, shared}
 └── docs/                   ADRs, plan, AI usage, performance notes
 ```
 
@@ -65,4 +66,4 @@ Indexes: `employees(country_code, job_title_id)`, `employees(department_id)`,
 | Web | `@WebMvcTest` | Request validation, error envelope, paging params |
 | SQL / API | Testcontainers Postgres | Read-model SQL, constraints, median/percentiles, FX conversion on small known datasets |
 | Architecture | ArchUnit | Layer and module boundaries |
-| Frontend | Vitest + Testing Library | Form validation, filter ↔ query mapping, table states |
+| Frontend | Vitest + Angular Testing Library | Form validation, filter ↔ query mapping, table states |

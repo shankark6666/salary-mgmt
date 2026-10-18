@@ -5,7 +5,7 @@ stop being fast. Every number below was measured, not estimated.
 
 **Environment:** MacBook (Apple silicon), Postgres 16 in local Docker, production builds of
 both apps, warm caches, 10,000 seeded employees with ~69,000 salary-history rows. Timings are
-end-to-end HTTP through the Next.js proxy unless noted.
+end-to-end HTTP through the UI's proxy unless noted.
 
 ## Measured
 
@@ -25,9 +25,9 @@ end-to-end HTTP through the Next.js proxy unless noted.
 | Outliers at 30% (peer medians for every role × country) | 60 ms |
 | **CSV export, whole workforce** (10,004 rows, 1.3 MB) | **0.36 s** |
 | Backend startup | ~7 s (unloaded machine) |
-| Frontend production build | ~8 s (Turbopack, offline: no font fetch) |
-| Release images | backend 415 MB · frontend 293 MB |
-| Test suites | backend 173 tests ~2 min (incl. Postgres container) · frontend 87 tests ~5 s |
+| Frontend production build | ~4 s (Angular CLI / esbuild); 157 kB initial transfer, pages lazy-loaded |
+| Release images | backend 415 MB · frontend 93 MB (nginx + static files) |
+| Test suites | backend 173 tests ~2 min (incl. Postgres container) · frontend 90 tests ~5 s |
 
 ## Why it is fast
 

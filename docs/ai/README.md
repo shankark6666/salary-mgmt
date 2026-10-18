@@ -121,6 +121,11 @@ conflict** — the exact "don't assume" failure the assessment screens for. It w
 when the recruiter's email named the role. The agent owned it, estimated the port (backend,
 API, tests and docs unchanged), and on approval rebuilt the UI in Angular.
 
+The port ran as four pull requests (#40 foundation, #41 employees, #42 insights, #43 cutover),
+each verified in a browser against the release containers before merging. The Next.js app was
+removed only in the last one, once the Angular UI did everything it did
+([ADR-0007](../adr/0007-angular-frontend.md)).
+
 ## Where human review changed the outcome
 
 Things caught by checking the agent's output against reality rather than accepting it:
@@ -166,3 +171,7 @@ Things caught by checking the agent's output against reality rather than accepti
 | **The UI was built in Next.js although the brief asked Java candidates for Angular.** | The user re-read the brief against the recruiter's email. | UI rebuilt in Angular; the backend and API were unaffected by design. Lesson: list every requirement and surface conflicts *before* building. |
 | The route guard called `inject()` after an `await` (NG0203): the app never redirected to sign-in. | Driving the container in a browser; a new guard test reproduces it. | Inject before the first await. |
 | A test kept failing after the fix. | Read the stack trace's line numbers against the file on disk. | Vitest's on-disk module cache served a stale compile; cleared, and documented in `CLAUDE.md`. |
+| Chart bar borders drew black. | Looked at the screenshots, not just the "chart painted" check. | Material's surface token is a `light-dark()` value, which canvas cannot parse; colours are now resolved through computed style. |
+| The role-comparison chart showed bands but no median dots. | Same screenshot review. | A line series on a horizontal bar chart plots on the wrong axis; points now carry explicit `{x, y}`. Unit test updated to assert the shape. |
+| The outliers page scrolled sideways at 768px, the same bug fixed earlier in the Next.js UI. | The overflow check at four widths, then listing every element past the viewport edge. | Screen-reader-only text escaped the scroll box again; the scroller is `relative`, and the Role column waits for 1024px. |
+| A scripted edit of `compose.release.yml` matched the wrong `volumes:` and mangled the file. | Read the diff before committing (37,000 changed lines for a 10-line change). | Restored from git; redid the edit with anchored markers. Never committed. |
