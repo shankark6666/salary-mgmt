@@ -31,7 +31,9 @@ ENV NODE_ENV=production \
 # The standalone server is plain `node server.js`: no package manager is needed at runtime, so
 # npm, npx and corepack are removed (they carried every CVE the image scan found, and an
 # attacker who gets a shell can no longer use them to pull in tools).
-RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+# Take Alpine security patches as soon as they ship, not when the base image is next rebuilt.
+RUN apk upgrade --no-cache \
+ && rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
            /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
  && addgroup -S app && adduser -S -G app -H app
 COPY --from=build --chown=app:app /app/.next/standalone ./
