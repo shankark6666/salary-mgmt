@@ -21,7 +21,8 @@ export const routes: Routes = [
       {
         path: 'employees',
         title: 'Employees · ACME Salary',
-        loadComponent: () => import('./features/employees/employees.placeholder').then((m) => m.EmployeesPlaceholder),
+        loadComponent: () =>
+          import('./features/employees/directory/employee-directory').then((m) => m.EmployeeDirectory),
       },
     ],
   },
