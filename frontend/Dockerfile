@@ -13,7 +13,7 @@ RUN pnpm build
 
 # ── runtime ──────────────────────────────────────────────────────────────────
 # Static files and nginx only: no Node, no package manager, non-root (uid 101), port 3000.
-FROM nginxinc/nginx-unprivileged:1.30.6-alpine
+FROM nginxinc/nginx-unprivileged:1.31.7-alpine
 USER root
 # Take Alpine security patches as soon as they ship, not when the base image is next rebuilt.
 RUN apk upgrade --no-cache
