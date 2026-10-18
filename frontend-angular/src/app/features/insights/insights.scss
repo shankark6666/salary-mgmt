@@ -1,0 +1,80 @@
+// Shared by every insights page: cards, filter row, data tables.
+:host { display: block; }
+
+.stack { display: grid; gap: 16px; transition: opacity 150ms; }
+.stack.refreshing, .refreshing { opacity: 0.6; }
+
+.tiles {
+  display: grid;
+  gap: 16px;
+  @media (min-width: 1024px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.card {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 12px;
+  background: var(--mat-sys-surface);
+}
+
+.card-title { margin: 0; font: var(--mat-sys-title-medium); }
+.card-description { margin: 4px 0 16px; color: var(--mat-sys-on-surface-variant); font: var(--mat-sys-body-medium); }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  mat-form-field { width: 100%; @media (min-width: 640px) { width: 240px; } }
+}
+
+.skeleton {
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container);
+  &.tile { height: 112px; }
+  &.block { height: 300px; }
+}
+
+// position: relative keeps absolutely positioned children (visually-hidden text) inside the scroll box.
+.table-scroll { position: relative; overflow-x: auto; }
+
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--mat-sys-body-medium);
+
+  th, td { padding: 10px 12px; border-bottom: 1px solid var(--mat-sys-outline-variant); text-align: left; vertical-align: middle; }
+  th { font: var(--mat-sys-label-medium); color: var(--mat-sys-on-surface-variant); white-space: nowrap; }
+  tbody tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .strong { font-weight: 500; }
+  .muted { color: var(--mat-sys-on-surface-variant); }
+  .track { width: 22%; min-width: 8rem; }
+}
+
+// Columns that only earn their space on wider screens.
+.from-sm { display: none; @media (min-width: 640px) { display: table-cell; } }
+// The sidebar takes ~260px from 768px up, so "medium" content starts at a 1024px viewport.
+.from-md { display: none; @media (min-width: 1024px) { display: table-cell; } }
+
+.link {
+  color: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  &:hover, &:focus-visible { text-decoration: underline; }
+}
+
+.sub { display: block; font: var(--mat-sys-body-small); color: var(--mat-sys-on-surface-variant); }
+
+.badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--status-warning);
+  color: var(--status-on-warning);
+  font: var(--mat-sys-label-small);
+  white-space: nowrap;
+}
