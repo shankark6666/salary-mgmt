@@ -222,8 +222,8 @@ importers:
         specifier: 4.5.1
         version: 4.5.1
       lucide-static:
-        specifier: 1.57.0
-        version: 1.57.0
+        specifier: 1.61.0
+        version: 1.61.0
       rxjs:
         specifier: 7.8.2
         version: 7.8.2
@@ -2258,8 +2258,8 @@ packages:
     resolution: {integrity: sha512-U4N8FgzmWxc8k1VH8Kr6lQg18U7Fjvby6wXHVRX/ZZ7IwWbRMgrRbP0Wrb5q5NVinryp4SQampHKdvtecItxUg==}
     engines: {node: 20 || >=22}
 
-  lucide-static@1.57.0:
-    resolution: {integrity: sha512-nuf4YoaKt3Pq9scXVQ71SLr0Q1/UZiTcfBBivFsCVL6biAzPplTikVWXLetBmK3oFEJS6f2L1rzgEsoJN/Ce0Q==}
+  lucide-static@1.61.0:
+    resolution: {integrity: sha512-yLAiQB3MWUJEstsEDAwenSA3m7vr1tdLvgnC16Q/XMxRRma0DWwMs8M2bWlvgShrIs1m2mWMJ+0AiahqQO4GrA==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -4660,7 +4660,7 @@ snapshots:
 
   lru-cache@11.5.3: {}
 
-  lucide-static@1.57.0: {}
+  lucide-static@1.61.0: {}
 
   lz-string@1.5.0: {}
 
